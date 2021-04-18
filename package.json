@@ -1,0 +1,28 @@
+{
+  "name": "totp-generator-web",
+  "version": "1.0.0",
+  "description": "Generate TOTP codes from your browser",
+  "main": "''",
+  "dependencies": {},
+  "devDependencies": {
+    "eslint": "^7.24.0",
+    "eslint-config-standard": "^16.0.2",
+    "eslint-plugin-html": "^6.1.2",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^4.3.1"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/k3karthic/totp-generator-web.git"
+  },
+  "author": "Karthic Kumaran Krisnakumar",
+  "license": "SEE LICENSE IN LICENSE",
+  "bugs": {
+    "url": "https://github.com/k3karthic/totp-generator-web/issues"
+  },
+  "homepage": "https://github.com/k3karthic/totp-generator-web#readme"
+}

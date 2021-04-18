@@ -114,204 +114,205 @@
         </div>
         
         <script>
-            (function() {
-                const validAlgos = new Set(['SHA-1', 'SHA-256', 'SHA-512']);
-                
-                // Map base32 character to 5 bit binary
-                const base32_map = {
-                    "2": "11010",
-                    "3": "11011",
-                    "4": "11100",
-                    "5": "11101",
-                    "6": "11110",
-                    "7": "11111",
-                    "A": "00000",
-                    "B": "00001",
-                    "C": "00010",
-                    "D": "00011",
-                    "E": "00100",
-                    "F": "00101",
-                    "G": "00110",
-                    "H": "00111",
-                    "I": "01000",
-                    "J": "01001",
-                    "K": "01010",
-                    "L": "01011",
-                    "M": "01100",
-                    "N": "01101",
-                    "O": "01110",
-                    "P": "01111",
-                    "Q": "10000",
-                    "R": "10001",
-                    "S": "10010",
-                    "T": "10011",
-                    "U": "10100",
-                    "V": "10101",
-                    "W": "10110",
-                    "X": "10111",
-                    "Y": "11000",
-                    "Z": "11001"
-                };
+        (function () {
+            const validAlgos = new Set(['SHA-1', 'SHA-256', 'SHA-512'])
 
-                const base32_to_uint8 = function(input) {
-                    let input_binary = '';
-                    for (let i = 0; i < input.length; i++) {
-                        const c = input[i];
+            // Map base32 character to 5 bit binary
+            const base32Map = {
+                2: '11010',
+                3: '11011',
+                4: '11100',
+                5: '11101',
+                6: '11110',
+                7: '11111',
+                A: '00000',
+                B: '00001',
+                C: '00010',
+                D: '00011',
+                E: '00100',
+                F: '00101',
+                G: '00110',
+                H: '00111',
+                I: '01000',
+                J: '01001',
+                K: '01010',
+                L: '01011',
+                M: '01100',
+                N: '01101',
+                O: '01110',
+                P: '01111',
+                Q: '10000',
+                R: '10001',
+                S: '10010',
+                T: '10011',
+                U: '10100',
+                V: '10101',
+                W: '10110',
+                X: '10111',
+                Y: '11000',
+                Z: '11001'
+            }
 
-                        if (c === '=') {
-                            input_binary += '00000';
-                        }
+            const base32ToUint8 = function (input) {
+                let inputBinary = ''
+        
+                for (let i = 0; i < input.length; i++) {
+                    const c = input[i]
 
-                        const num = base32_map[c];
-                        if (num === undefined) {
-                            throw new Error(`Invaliad base32 key: ${c}`);
-                        }
-
-                        input_binary += num;
+                    if (c === '=') {
+                        inputBinary += '00000'
                     }
 
-                    if (input_binary.length % 8 !== 0) {
-                        throw new Error(`Invalid base32 size: ${input_binary.length} bits`);
+                    const num = base32Map[c]
+                    if (num === undefined) {
+                        throw new Error(`Invaliad base32 key: ${c}`)
                     }
 
-                    const output = [];
-
-                    for (let i = 0; i < input_binary.length; i += 8) {
-                        const byte = input_binary.substr(i, 8);
-                        output.push(parseInt(byte, 2));
-                    }
-
-                    return new Uint8Array(output);
-                };
-
-                const decimal_to_uint8 = function(num) {
-                    const arr = [];
-
-                    let n = num;
-                    while (n > 0) {
-                        const digit = n % 16;
-                        arr.unshift(digit.toString(16));
-
-                        n = Math.floor(n / 16);
-                    }
-
-                    let str = arr.join('');
-                    let str_length = str.length;
-
-                    const pad_length = str_length  < 16 ? 16 - str_length : str_length % 16;
-                    str = str.padStart(pad_length + str_length, '0');
-
-                    const out_arr = [];
-                    for (let i = 0; i < str.length; i += 2) {
-                        out_arr.push(parseInt(str.substr(i, 2), 16));
-                    }
-
-                    return Uint8Array.from(out_arr);
-                };
-
-                const totp = async function(key_str, hashAlgorithm, period, numDigits) {
-                    const key_uint = base32_to_uint8(key_str);
-
-                    const algorithm = {
-                        name: "HMAC",
-                        hash: hashAlgorithm
-                    };
-
-                    const key = await window.crypto.subtle.importKey("raw", key_uint, algorithm, true, ["sign"]);
-
-                    // https://tools.ietf.org/html/rfc6238#section-4
-                    const now_unix = Math.round(Date.now() / 1000);
-                    const t = Math.floor((now_unix - 0) / period); // Assuming T0 = 0
-                    const data = decimal_to_uint8(t);
-
-                    const hmac_buffer = await window.crypto.subtle.sign(algorithm, key, data);
-                    const hmac = new Uint8Array(hmac_buffer);
-
-                    // https://tools.ietf.org/html/rfc4226#section-5.4
-                    const offset = hmac[19] & 0xf;
-                    const bin_code = ((hmac[offset] & 0x7f) << 24)
-                        | ((hmac[offset+1] & 0xff) << 16)
-                        | ((hmac[offset+2] & 0xff) << 8)
-                        | (hmac[offset+3] & 0xff);
-                    const code = bin_code % Math.pow(10, numDigits);
-
-                    return code
+                    inputBinary += num
                 }
-                
-                const display_totp = function() {
-                    const period = arguments[2];
-                    
-                    return totp.apply(this, arguments)
-                        .then(function(code) {
-                            const code_output = document.querySelector('#output .code')
-                            if (code_output) {
-                                code_output.innerText = code;
+
+                if (inputBinary.length % 8 !== 0) {
+                    throw new Error(`Invalid base32 size: ${inputBinary.length} bits`)
+                }
+
+                const output = []
+
+                for (let i = 0; i < inputBinary.length; i += 8) {
+                    const byte = inputBinary.substr(i, 8)
+                    output.push(parseInt(byte, 2))
+                }
+
+                return new Uint8Array(output)
+            }
+
+            const decimalToUint8 = function (num) {
+                const arr = []
+
+                let n = num
+                while (n > 0) {
+                    const digit = n % 16
+                    arr.unshift(digit.toString(16))
+
+                    n = Math.floor(n / 16)
+                }
+
+                let str = arr.join('')
+                const strL = str.length
+
+                const padL = strL < 16 ? 16 - strL : strL % 16
+                str = str.padStart(padL + strL, '0')
+
+                const outArr = []
+                for (let i = 0; i < str.length; i += 2) {
+                    outArr.push(parseInt(str.substr(i, 2), 16))
+                }
+
+                return Uint8Array.from(outArr)
+            }
+
+            const totp = async function (keyStr, hashAlgorithm, period, numDigits) {
+                const keyUint = base32ToUint8(keyStr)
+
+                const algorithm = {
+                    name: 'HMAC',
+                    hash: hashAlgorithm
+                }
+
+                const key = await window.crypto.subtle.importKey('raw', keyUint, algorithm, true, ['sign'])
+
+                // https://tools.ietf.org/html/rfc6238#section-4
+                const nowUnix = Math.round(Date.now() / 1000)
+                const t = Math.floor((nowUnix - 0) / period) // Assuming T0 = 0
+                const data = decimalToUint8(t)
+
+                const hmacBuffer = await window.crypto.subtle.sign(algorithm, key, data)
+                const hmac = new Uint8Array(hmacBuffer)
+
+                // https://tools.ietf.org/html/rfc4226#section-5.4
+                const offset = hmac[19] & 0xf
+                const binCode = ((hmac[offset] & 0x7f) << 24) |
+                    ((hmac[offset + 1] & 0xff) << 16) |
+                    ((hmac[offset + 2] & 0xff) << 8) |
+                    (hmac[offset + 3] & 0xff)
+                const code = binCode % Math.pow(10, numDigits)
+
+                return code
+            }
+        
+            const displayTotp = function () {
+                const period = arguments[2]
+
+                return totp.apply(this, arguments)
+                    .then(function (code) {
+                        const codeOutput = document.querySelector('#output .code')
+                        if (codeOutput) {
+                            codeOutput.innerText = code
+                        }
+        
+                        const timerOutput = document.querySelector('#output .timer')
+                        if (timerOutput) {
+                            const tsLeft = period - (Math.round(Date.now() / 1000) % period)
+                            timerOutput.innerText = tsLeft.toString()
+                        }
+                    })
+                    .catch(function (err) {
+                        console.log(err)
+                        alert(err.message)
+                    })
+            }
+        
+            const btn = document.querySelector('#generate')
+            if (btn) {
+                let intervalHandler
+
+                btn.onclick = function () {
+                    const keyInput = document.querySelector('input[name="key"]')
+                    if (!keyInput) {
+                        return alert('Unable to find Secret Key input')
+                    }
+                    if (!keyInput.value) {
+                        return alert('Please enter a secret key')
+                    }
+        
+                    let hashAlgorithm = 'SHA-1'
+                    let period = 30
+                    let numDigits = 6
+        
+                    const algoInput = document.querySelector('select[name="algo"]')
+                    if (algoInput && validAlgos.has(algoInput.value)) {
+                        hashAlgorithm = algoInput.value
+                    }
+        
+                    const periodInput = document.querySelector('input[name="period"]')
+                    if (periodInput) {
+                        const periodNum = parseInt(periodInput.value)
+                        period = !isNaN(periodNum) && periodNum > 0 ? periodNum : period
+                    }
+        
+                    const digitsInput = document.querySelector('input[name="digits"]')
+                    if (digitsInput) {
+                        const digitsNum = parseInt(digitsInput.value)
+                        numDigits = !isNaN(digitsNum) && digitsNum > 0 ? digitsNum : numDigits
+                    }
+        
+                    const args = [keyInput.value, hashAlgorithm, period, numDigits]
+        
+                    displayTotp.apply(window, args)
+                        .then(function (code) {
+                            if (intervalHandler) {
+                                clearInterval(intervalHandler)
                             }
-                        
-                            const timer_output = document.querySelector('#output .timer')
-                            if (timer_output) {
-                                const ts_left = period - (Math.round(Date.now() / 1000) % period); 
-                                timer_output.innerText = ts_left.toString();
-                            }
+        
+                            intervalHandler = setInterval(function () {
+                                displayTotp.apply(window, args)
+                            }, 1000)
+        
+                            const output = document.querySelector('#output')
+                            output.removeAttribute('hidden')
                         })
-                        .catch(function(err) {
-                            console.log(err);
-                            alert(err.message);
-                        });
                 }
-                
-                const btn = document.querySelector('#generate')
-                if (btn) {
-                    let interval_handler;
-                    
-                    btn.onclick = function() {
-                        const key_input = document.querySelector('input[name="key"]')
-                        if (!key_input) {
-                            return alert('Unable to find Secret Key input');
-                        }
-                        if (!key_input.value) {
-                            return alert('Please enter a secret key');
-                        }
-                        
-                        let hashAlgorithm = 'SHA-1';
-                        let period = 30;
-                        let numDigits = 6;
-                        
-                        const algo_input = document.querySelector('select[name="algo"]')
-                        if (algo_input && validAlgos.has(algo_input.value)) {
-                            hashAlgorithm = algo_input.value;
-                        }
-                        
-                        const period_input = document.querySelector('input[name="period"]')
-                        if (period_input) {
-                            const period_num = parseInt(period_input.value);
-                            period = !isNaN(period_num) && period_num > 0 ? period_num : period;
-                        }
-                        
-                        const digits_input = document.querySelector('input[name="digits"]')
-                        if (digits_input) {
-                            const digits_num = parseInt(digits_input.value);
-                            numDigits = !isNaN(digits_num) && digits_num > 0 ? digits_num : numDigits;
-                        }
-                        
-                        const args = [key_input.value, hashAlgorithm, period, numDigits];
-                        
-                        display_totp.apply(window, args)
-                            .then(function(code) {
-                                if (interval_handler) {
-                                    clearInterval(interval_handler);
-                                }
-                            
-                                interval_handler = setInterval(function() {
-                                    display_totp.apply(window, args)       
-                                }, 1000)
-                            
-                                const output = document.querySelector('#output');
-                                output.removeAttribute('hidden');
-                            });
-                    }
-                }
-            })();
+            }
+        })()
         </script>
     </body>
 </html>
