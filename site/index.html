@@ -72,6 +72,14 @@
             #output .code {
                 font-size: 2rem;
             }
+
+            #output button {
+                display: none;
+            }
+
+            #output button[show='true'] {
+                display: inline-block;
+            }
         </style>
     </head>
 
@@ -125,6 +133,7 @@
                 <div class="separator"></div>
 
                 <div id="output" class="section" hidden>
+                    <button>Copy</button>
                     <span class="code">000000</span>
                     <span class="timer">00</span>
                 </div>
@@ -134,6 +143,28 @@
         <script>
             ;(function () {
                 const validAlgos = new Set(['SHA-1', 'SHA-256', 'SHA-512'])
+
+                // Enable copy if Clipboard API available
+                if (navigator && navigator.clipboard) {
+                    const copy = document.querySelector('#output button')
+                    if (copy) {
+                        copy.setAttribute('show', 'true')
+
+                        copy.onclick = function () {
+                            const codeOutput = document.querySelector(
+                                '#output .code'
+                            )
+                            if (codeOutput) {
+                                navigator.clipboard
+                                    .writeText(codeOutput.innerText)
+                                    .catch(function (err) {
+                                        console.log(err)
+                                        alert('Could not copy')
+                                    })
+                            }
+                        }
+                    }
+                }
 
                 // Map base32 character to 5 bit binary
                 const base32Map = {
