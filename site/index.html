@@ -275,40 +275,39 @@
                     return code
                 }
 
-                const displayTotp = function () {
+                // Generate TOTP and update output HTML
+                const displayTotp = async function () {
                     const period = arguments[2]
 
-                    return totp
-                        .apply(this, arguments)
-                        .then(function (code) {
-                            const codeOutput = document.querySelector(
-                                '#output .code'
-                            )
-                            if (codeOutput) {
-                                codeOutput.innerText = code
-                            }
+                    try {
+                        const code = await totp.apply(this, arguments)
 
-                            const timerOutput = document.querySelector(
-                                '#output .timer'
-                            )
-                            if (timerOutput) {
-                                const tsLeft =
-                                    period -
-                                    (Math.round(Date.now() / 1000) % period)
-                                timerOutput.innerText = tsLeft.toString()
-                            }
-                        })
-                        .catch(function (err) {
-                            console.log(err)
-                            alert(err.message)
-                        })
+                        const codeOutput = document.querySelector(
+                            '#output .code'
+                        )
+                        if (codeOutput) {
+                            codeOutput.innerText = code
+                        }
+
+                        const timerOutput = document.querySelector(
+                            '#output .timer'
+                        )
+                        if (timerOutput) {
+                            const tsLeft =
+                                period -
+                                (Math.round(Date.now() / 1000) % period)
+                            timerOutput.innerText = tsLeft.toString()
+                        }
+                    } catch (err) {
+                        console.log(err)
+                        alert(err.message)
+                    }
                 }
 
-                const btn = document.querySelector('#generate')
-                if (btn) {
-                    let intervalHandler
-
-                    btn.onclick = function () {
+                // Trigger displayTotp and if successful register 1s updater
+                let intervalHandler // Hold setInterval result
+                const btnHandler = async function () {
+                    try {
                         const keyInput = document.querySelector(
                             'input[name="key"]'
                         )
@@ -359,19 +358,27 @@
                             numDigits
                         ]
 
-                        displayTotp.apply(window, args).then(function (code) {
-                            if (intervalHandler) {
-                                clearInterval(intervalHandler)
-                            }
+                        await displayTotp.apply(window, args)
 
-                            intervalHandler = setInterval(function () {
-                                displayTotp.apply(window, args)
-                            }, 1000)
+                        if (intervalHandler) {
+                            clearInterval(intervalHandler)
+                        }
 
-                            const output = document.querySelector('#output')
-                            output.removeAttribute('hidden')
-                        })
+                        intervalHandler = setInterval(function () {
+                            displayTotp.apply(window, args)
+                        }, 1000)
+
+                        const output = document.querySelector('#output')
+                        output.removeAttribute('hidden')
+                    } catch (err) {
+                        console.log(err)
+                        alert(err.message)
                     }
+                }
+
+                const btn = document.querySelector('#generate')
+                if (btn) {
+                    btn.onclick = btnHandler
                 }
             })()
         </script>
