@@ -40,8 +40,9 @@
             }
 
             #app {
-                display: inline-block;
-                text-align: left;
+                display: flex;
+                justify-content: center;
+                padding: 0 1rem;
             }
 
             #app button {
@@ -61,7 +62,9 @@
             }
 
             #input-card {
-                min-width: 25rem;
+                text-align: left;
+                width: 100%;
+                max-width: 25rem;
                 background: #fff;
                 border-radius: 0.4rem;
                 border: 1px solid silver;
@@ -133,6 +136,25 @@
 
             #output .code {
                 font-size: 2rem;
+            }
+
+            #output .timer {
+                border-radius: 50%;
+                padding: 0.4rem;
+                box-sizing: border-box;
+
+                color: #fff;
+                background-color: green;
+            }
+
+            #output .timer[warning='true'] {
+                color: black;
+                background-color: yellow;
+            }
+
+            #output .timer[alert='true'] {
+                color: #fff;
+                background-color: red;
             }
 
             #output button {
@@ -411,7 +433,21 @@
                             const tsLeft =
                                 period -
                                 (Math.round(Date.now() / 1000) % period)
-                            timerOutput.innerText = tsLeft.toString()
+
+                            timerOutput.innerText = tsLeft
+                                .toString()
+                                .padStart(2, '0')
+
+                            if (tsLeft <= 5) {
+                                timerOutput.removeAttribute('warning')
+                                timerOutput.setAttribute('alert', 'true')
+                            } else if (tsLeft <= 15) {
+                                timerOutput.removeAttribute('alert')
+                                timerOutput.setAttribute('warning', 'true')
+                            } else {
+                                timerOutput.removeAttribute('alert')
+                                timerOutput.removeAttribute('warning')
+                            }
                         }
 
                         return true
