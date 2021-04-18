@@ -2,6 +2,10 @@
 <html lang="en">
     <head>
         <meta charset="utf-8" />
+        <meta
+            http-equiv="Content-Security-Policy"
+            content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src data:; connect-src ws://127.0.0.1:*"
+        />
 
         <title>TOTP Generator</title>
         <meta
@@ -40,10 +44,27 @@
                 text-align: left;
             }
 
+            #app button {
+                display: inline-block;
+                cursor: pointer;
+
+                padding: 0.25rem 0.5rem;
+
+                color: #fff;
+                background-color: slateblue;
+                border-radius: 0.25rem;
+                border: 1px solid slateblue;
+            }
+
+            #app button:hover {
+                background-color: darkslateblue;
+            }
+
             #input-card {
+                min-width: 25rem;
                 background: #fff;
                 border-radius: 0.4rem;
-                border: 1px solid black;
+                border: 1px solid silver;
             }
 
             #input-card .section {
@@ -51,22 +72,63 @@
             }
 
             #input-card .separator {
-                border-top: 0.0625rem solid #fafafa;
+                border-top: 0.0625rem solid silver;
                 margin: 0.25rem 0;
             }
 
-            #input-card #advanced-opts {
+            #opts label,
+            #opts select,
+            #opts input {
+                display: block;
+                width: 100%;
+            }
+
+            #opts input,
+            #opts select {
+                box-sizing: border-box;
+                padding: 0.5rem 1rem;
+                border: 1px solid silver;
+                border-radius: 0.25rem;
+                margin: 0.25rem 0;
+            }
+
+            #opts #advanced-opts {
                 margin-top: 1rem;
             }
 
-            #output {
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
+            #opts #advanced-opts label {
+                margin-top: 1rem;
+            }
+            #opts #advanced-opts label:first-child {
+                margin-top: 0;
+            }
+
+            .accordion-head {
+                cursor: pointer;
+                text-decoration: underline;
+            }
+
+            .accordion-body {
+                display: none;
+                margin-top: 0.5rem;
+            }
+
+            .accordion-body[show='true'] {
+                display: block;
+            }
+
+            #controls button {
+                width: 100%;
             }
 
             #output[hidden] {
                 display: none;
+            }
+
+            #output .content {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
             }
 
             #output .code {
@@ -88,7 +150,7 @@
             <div id="input-card">
                 <div id="opts" class="section">
                     <div id="basic-opts">
-                        <label for="key">Secret Key</label>
+                        <label for="key">Secret (Base32)</label>
                         <input
                             name="key"
                             type="password"
@@ -98,7 +160,7 @@
                     <div id="advanced-opts">
                         <div class="accordion-head">Advanced Options</div>
                         <div class="accordion-body">
-                            <label for="algo">Hash Algorithm</label>
+                            <label for="algo">HMAC Hash</label>
                             <select name="algo" value="SHA-1">
                                 <option value="SHA-1">SHA-1</option>
                                 <option value="SHA-256">SHA-256</option>
@@ -130,12 +192,13 @@
                     <button id="generate">Generate</button>
                 </div>
 
-                <div class="separator"></div>
-
-                <div id="output" class="section" hidden>
-                    <button>Copy</button>
-                    <span class="code">000000</span>
-                    <span class="timer">00</span>
+                <div id="output" hidden>
+                    <div class="separator"></div>
+                    <div class="section content">
+                        <button>Copy</button>
+                        <span class="code">000000</span>
+                        <span class="timer">00</span>
+                    </div>
                 </div>
             </div>
         </div>
@@ -143,6 +206,24 @@
         <script>
             ;(function () {
                 const validAlgos = new Set(['SHA-1', 'SHA-256', 'SHA-512'])
+
+                // Basic Accordion
+                const accHead = document.querySelector('.accordion-head')
+                if (accHead) {
+                    accHead.onclick = function () {
+                        const accBody = document.querySelector(
+                            '.accordion-body',
+                            this.parentElement
+                        )
+                        if (accBody) {
+                            if (accBody.hasAttribute('show')) {
+                                accBody.removeAttribute('show')
+                            } else {
+                                accBody.setAttribute('show', 'true')
+                            }
+                        }
+                    }
+                }
 
                 // Enable copy if Clipboard API available
                 if (navigator && navigator.clipboard) {
@@ -306,6 +387,9 @@
                     return code
                 }
 
+                // Hold setInterval result
+                let intervalHandler
+
                 // Generate TOTP and update output HTML
                 const displayTotp = async function () {
                     const period = arguments[2]
@@ -329,14 +413,22 @@
                                 (Math.round(Date.now() / 1000) % period)
                             timerOutput.innerText = tsLeft.toString()
                         }
+
+                        return true
                     } catch (err) {
                         console.log(err)
+
+                        if (intervalHandler) {
+                            clearInterval(intervalHandler)
+                        }
+
                         alert(err.message)
                     }
+
+                    return false
                 }
 
                 // Trigger displayTotp and if successful register 1s updater
-                let intervalHandler // Hold setInterval result
                 const btnHandler = async function () {
                     try {
                         const keyInput = document.querySelector(
@@ -389,18 +481,20 @@
                             numDigits
                         ]
 
-                        await displayTotp.apply(window, args)
+                        const r = await displayTotp.apply(window, args)
 
-                        if (intervalHandler) {
-                            clearInterval(intervalHandler)
+                        if (r) {
+                            if (intervalHandler) {
+                                clearInterval(intervalHandler)
+                            }
+
+                            intervalHandler = setInterval(function () {
+                                displayTotp.apply(window, args)
+                            }, 1000)
+
+                            const output = document.querySelector('#output')
+                            output.removeAttribute('hidden')
                         }
-
-                        intervalHandler = setInterval(function () {
-                            displayTotp.apply(window, args)
-                        }, 1000)
-
-                        const output = document.querySelector('#output')
-                        output.removeAttribute('hidden')
                     } catch (err) {
                         console.log(err)
                         alert(err.message)
