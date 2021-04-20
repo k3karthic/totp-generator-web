@@ -12,7 +12,7 @@ The entire application consists of a single handwritten HTML file that can be ru
 
 The application is handwritten using only the APIs provided by the browser and no external dependencies. This makes it possible to inspect and review the code to ensure that it has not been compromised.
 
-A minimal build tool consisting of Bash and OpenSSL CLI is used to calculate hashes of the inline scripts and styles used. The hashes are used to configure the [Content Security Policy](https://content-security-policy.com/hash/).
+A minimal build tool consisting of Bash and OpenSSL CLI is used to calculate hashes of the inline scripts and styles used. The hashes are used to configure [Content Security Policy](https://content-security-policy.com/hash/) for the site using a [meta tag](https://content-security-policy.com/examples/meta/) which makes it easy to host as a static site using [Netlify](https://www.netlify.com/).
 
 ## Settings
 
