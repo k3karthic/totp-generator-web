@@ -4,24 +4,26 @@ Generate TOTP codes directly from your browser. The application works using only
 
 ## Purpose
 
-The entire application consists of a single hand-written HTML file which can be easily run offline by saving it to disk. The design makes it easy to use from a restricted environment like [Tails](https://tails.boum.org/) or in environments where it is impossible to install applications like a public internet cafe.
+The entire application consists of a single handwritten HTML file that can be run offline by saving it to disk. The design makes it easy to use from a restricted environment like [Tails](https://tails.boum.org/) or in places where it is impossible to install applications like a public internet cafe.
 
-**Assumption:** TOTP keys are stored in a secure location which can be accessed from a web browser and you are able to safely transfer the key from storage into the application's input field (Copy/Paste or Manual typing using a hardware/virtual keyboard based on your threat model).
+**Assumption:** TOTP keys are stored in a secure location that can be accessed from a web browser. You can safely transfer the key from storage into the application's input field (Copy/Paste or Manual typing using a hardware/virtual keyboard based on your threat model).
 
 ## Design
 
-The application is hand writted using only the APIs provided by the browser and no external dependencies. This makes it possible to inspect and review the code to ensure that it has not been compromised.
+The application is handwritten using only the APIs provided by the browser and no external dependencies. This makes it possible to inspect and review the code to ensure that it has not been compromised.
 
 A minimal build tool consisting of Bash and OpenSSL CLI is used to calculate hashes of the inline scripts and styles used. The hashes are used to configure the [Content Security Policy](https://content-security-policy.com/hash/).
 
 ## Settings
 
-Currently, the secret key can only be entered in Base32 format. The default settings are configured to be compatible with Google Authenticator,
+The default settings are configured to be compatible with Google Authenticator,
 * HMAC Algorithm: SHA-1
 * Period: 30 seconds
 * Digits: 6
 
-The values can be custmoized using the "Advanced Options" menu.
+The values can be customized using the "Advanced Options" menu.
+
+Currently, you can only enter the secret key in Base32 format.
 
 ## Web Technologies Used
 
