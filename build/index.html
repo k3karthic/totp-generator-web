@@ -1,27 +1,19 @@
-<!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="utf-8" />
-        <meta
-            http-equiv="Content-Security-Policy"
-            content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src data:; connect-src ws://127.0.0.1:*"
-        />
+<!DOCTYPE html><html lang="en"><head>
+        <meta charset="utf-8">
+
+        <!-- 'sha256-iN7wpJdxHlpujRppkOA8N0+Mzp0ZqZr3lCtxM00Y63c=' is for the script injected by live-server -->
+        <!-- ws://127.0.0.1:* is to allow auto reload by live-server -->
+        <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-UyKZDsVR70eoXnITftBoVpRKJuwA4DejWv5+KBnfM8U=' 'sha256-iN7wpJdxHlpujRppkOA8N0+Mzp0ZqZr3lCtxM00Y63c='; style-src 'sha256-dgM0WnvASFvX67t33tPf6xuC5sPnY6JV0hg6vVDP8EE='; img-src data:; connect-src ws://127.0.0.1:*">
 
         <title>TOTP Generator</title>
-        <meta
-            name="description"
-            content="Generate TOTP codes from your browser"
-        />
+        <meta name="description" content="Generate TOTP codes from your browser">
 
-        <meta property="og:title" content="TOTP Generator" />
-        <meta
-            property="og:description"
-            content="Generate TOTP codes from your browser"
-        />
+        <meta property="og:title" content="TOTP Generator">
+        <meta property="og:description" content="Generate TOTP codes from your browser">
 
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <meta name="theme-color" content="#fafafa" />
+        <meta name="theme-color" content="#fafafa">
 
         <style>
             html {
@@ -173,11 +165,7 @@
                 <div id="opts" class="section">
                     <div id="basic-opts">
                         <label for="key">Secret (Base32)</label>
-                        <input
-                            name="key"
-                            type="password"
-                            value="XY7MXDNK5ZEKJT4Y"
-                        />
+                        <input name="key" type="password" value="XY7MXDNK5ZEKJT4Y">
                     </div>
                     <div id="advanced-opts">
                         <div class="accordion-head">Advanced Options</div>
@@ -190,20 +178,10 @@
                             </select>
 
                             <label for="period">Period (seconds)</label>
-                            <input
-                                name="period"
-                                type="number"
-                                value="30"
-                                min="1"
-                            />
+                            <input name="period" type="number" value="30" min="1">
 
                             <label for="digits">Digits</label>
-                            <input
-                                name="digits"
-                                type="number"
-                                value="6"
-                                min="1"
-                            />
+                            <input name="digits" type="number" value="6" min="1">
                         </div>
                     </div>
                 </div>
@@ -214,7 +192,7 @@
                     <button id="generate">Generate</button>
                 </div>
 
-                <div id="output" hidden>
+                <div id="output" hidden="">
                     <div class="separator"></div>
                     <div class="section content">
                         <button>Copy</button>
@@ -544,5 +522,6 @@
                 }
             })()
         </script>
-    </body>
-</html>
+    
+
+</body></html>

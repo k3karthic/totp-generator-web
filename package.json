@@ -12,13 +12,16 @@
     "eslint-plugin-import": "^2.22.1",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^4.3.1",
+    "jsdom": "^16.5.3",
     "live-server": "^1.2.1",
     "lodash": "^4.17.21",
     "prettier": "^2.2.1",
     "prettier-config-standard": "^4.0.0"
   },
   "scripts": {
-    "start": "live-server site"
+    "start": "live-server build",
+    "watch": "node watch.js",
+    "build": "./build.sh"
   },
   "repository": {
     "type": "git",

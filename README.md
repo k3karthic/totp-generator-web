@@ -1,20 +1,18 @@
 # TOTP Web Generator
 
-Generate TOTP codes directly from your browser. The application works using only the APIs available to JavaScript; your data is not sent to a server as it never leaves your browser.
+Generate TOTP codes directly from your browser. The application works using only the APIs available to JavaScript; your data remains only in your browser.
 
 ![Application Screenshot](https://github.com/k3karthic/totp-generator-web/raw/main/resources/screenshot.png)
 
 ## Purpose
 
-The entire application consists of a single handwritten HTML file that can be used offline by running it from disk. The design makes it easy to use in a restricted environment like [Tails](https://tails.boum.org/) or in places where it is impossible to install applications like a public internet cafe.
+The entire application consists of a single HTML file that can be used offline by saving the it to disk and running it locally. The design makes it easy to use in a restricted environment like [Tails](https://tails.boum.org/) or in places where it is impossible to install applications like a public internet cafe.
 
 **Assumption:** TOTP keys are stored in a secure location that can be accessed from a web browser. You can safely transfer the key from storage into the application's input field (Copy/Paste or Manual typing using a hardware/virtual keyboard based on your threat model).
 
 ## Design
 
-The application is handwritten using only the APIs provided by the browser and no external dependencies. This makes it possible to inspect and review the code to ensure that it has not been compromised.
-
-A minimal build tool consisting of Bash and OpenSSL CLI is used to calculate hashes of the inline scripts and styles used. The hashes are used to configure [Content Security Policy](https://content-security-policy.com/hash/) for the site using a [meta tag](https://content-security-policy.com/examples/meta/) which makes it easy to host as a static site using [Netlify](https://www.netlify.com/).
+The application is written using only the APIs provided by the browser and no external dependencies. This makes it possible to inspect and review the code to ensure that it has not been compromised.
 
 ## Settings
 
@@ -43,13 +41,28 @@ The following tools are used only during development,
 -   [Live Server](https://github.com/tapio/live-server) - Auto reload on changes to `site/index.html`
 -   [Visual Studio Code](https://code.visualstudio.com/) - Code editor with [ESLint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint) and [Prettier](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode) extensions.
 
-The tools are optional, and it is possible to work with just a simple text editor. You would have to manually refresh the page after making changes to `site/index.html`.
+A minimal build tool (`watch.js`) is used to calculate hashes of the inline scripts and styles used. The hashes are used to configure [Content Security Policy](https://content-security-policy.com/hash/) for the site using a [meta tag](https://content-security-policy.com/examples/meta/) which makes it easy to host as a static site using [Netlify](https://www.netlify.com/).
+
+Run the following commands in different tabs,
+
+```
+npm run start
+npm run watch
+```
 
 ## Deployment
 
-The site is deployed on [Netlify](https://www.netlify.com/) with a GitHub build hook to automatically push a new version when a commit is made to the `main` branch.
+The site is deployed on [Netlify](https://www.netlify.com/) with a GitHub build hook to automatically push a new version when a commit is made to the `main` branch. The contents of the `dist` folder is used for the deployment.
 
 Development is on the `devel` branch and merged with `main` for a release.
+
+Run the following command to update the `dist` folder,
+
+```
+npm run build
+```
+
+The command removes CSP configuration which is only required for development.
 
 ## Acknowledgements
 
