@@ -4,7 +4,7 @@ Generate TOTP codes directly from your browser. The application works using only
 
 ## Purpose
 
-The entire application consists of a single handwritten HTML file that can be run offline by saving it to disk. The design makes it easy to use from a restricted environment like [Tails](https://tails.boum.org/) or in places where it is impossible to install applications like a public internet cafe.
+The entire application consists of a single handwritten HTML file that can be used offline by running it from disk. The design makes it easy to use in a restricted environment like [Tails](https://tails.boum.org/) or in places where it is impossible to install applications like a public internet cafe.
 
 **Assumption:** TOTP keys are stored in a secure location that can be accessed from a web browser. You can safely transfer the key from storage into the application's input field (Copy/Paste or Manual typing using a hardware/virtual keyboard based on your threat model).
 
