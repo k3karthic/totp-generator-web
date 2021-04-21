@@ -2,6 +2,8 @@
 
 Generate TOTP codes directly from your browser. The application works using only the APIs available to JavaScript; your data is not sent to a server as it never leaves your browser.
 
+![Application Screenshot](https://github.com/k3karthic/totp-generator-web/raw/main/resources/screenshot.png)
+
 ## Purpose
 
 The entire application consists of a single handwritten HTML file that can be used offline by running it from disk. The design makes it easy to use in a restricted environment like [Tails](https://tails.boum.org/) or in places where it is impossible to install applications like a public internet cafe.
@@ -17,9 +19,10 @@ A minimal build tool consisting of Bash and OpenSSL CLI is used to calculate has
 ## Settings
 
 The default settings are configured to be compatible with Google Authenticator,
-* HMAC Algorithm: SHA-1
-* Period: 30 seconds
-* Digits: 6
+
+-   HMAC Algorithm: SHA-1
+-   Period: 30 seconds
+-   Digits: 6
 
 The values can be customized using the "Advanced Options" menu.
 
@@ -35,10 +38,10 @@ Currently, you can only enter the secret key in Base32 format.
 
 The following tools are used only during development,
 
-* [ESLint](https://eslint.org/) - Code lint for JavaScript
-* [Prettier](https://prettier.io/) - Code formatting
-* [Live Server](https://github.com/tapio/live-server) - Auto reload on changes to `site/index.html`
-* [Visual Studio Code](https://code.visualstudio.com/) - Code editor with [ESLint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint) and [Prettier](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode) extensions.
+-   [ESLint](https://eslint.org/) - Code lint for JavaScript
+-   [Prettier](https://prettier.io/) - Code formatting
+-   [Live Server](https://github.com/tapio/live-server) - Auto reload on changes to `site/index.html`
+-   [Visual Studio Code](https://code.visualstudio.com/) - Code editor with [ESLint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint) and [Prettier](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode) extensions.
 
 The tools are optional, and it is possible to work with just a simple text editor. You would have to manually refresh the page after making changes to `site/index.html`.
 
@@ -52,7 +55,7 @@ Development is on the `devel` branch and merged with `main` for a release.
 
 The application was built using the following as reference material,
 
-* [bellstrand/totp-generator](https://github.com/bellstrand/totp-generator) - Reference TOTP implementation
-* [RFC 6238 (TOTP)](https://tools.ietf.org/html/rfc6238)
-* [RFC 4226 (HOTP)](https://tools.ietf.org/html/rfc4226)
-* [Background Pattern](https://www.toptal.com/designers/subtlepatterns/double-bubble-outline-pattern/) - Background pattern by [Tomislava Babić](https://behance.net/antitomi)
+-   [bellstrand/totp-generator](https://github.com/bellstrand/totp-generator) - Reference TOTP implementation
+-   [RFC 6238 (TOTP)](https://tools.ietf.org/html/rfc6238)
+-   [RFC 4226 (HOTP)](https://tools.ietf.org/html/rfc4226)
+-   [Background Pattern](https://www.toptal.com/designers/subtlepatterns/double-bubble-outline-pattern/) - Background pattern by [Tomislava Babić](https://behance.net/antitomi)
