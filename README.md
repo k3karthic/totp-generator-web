@@ -31,6 +31,23 @@ Currently, you can only enter the secret key in Base32 format.
 2. [Uint8Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint8Array) - Used to store and process binary data according to [RFC 6238 (TOTP)](https://tools.ietf.org/html/rfc6238) and [RFC 4226 (HOTP)](https://tools.ietf.org/html/rfc4226). [Browser Support](https://caniuse.com/mdn-javascript_builtins_uint8array)
 3. [Async/Await](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/async_function) - Easier to work with Promises. [Browser Support](https://caniuse.com/async-functions)
 
+## Development
+
+The following tools are used only during development,
+
+* [ESLint](https://eslint.org/) - Code lint for JavaScript
+* [Prettier](https://prettier.io/) - Code formatting
+* [Live Server](https://github.com/tapio/live-server) - Auto reload on changes to `site/index.html`
+* [Visual Studio Code](https://code.visualstudio.com/) - Code editor with [ESLint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint) and [Prettier](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode) extensions.
+
+The tools are optional, and it is possible to work with just a simple text editor. You would have to manually refresh the page after making changes to `site/index.html`.
+
+## Deployment
+
+The site is deployed on [Netlify](https://www.netlify.com/) with a GitHub build hook to automatically push a new version when a commit is made to the `main` branch.
+
+Development is on the `devel` branch and merged with `main` for a release.
+
 ## Acknowledgements
 
 The application was built using the following as reference material,
