@@ -4,15 +4,13 @@ Generate TOTP codes directly from your browser. The application works using only
 
 ![Application Screenshot](https://github.com/k3karthic/totp-generator-web/raw/main/resources/screenshot.png)
 
-## Purpose
+## Design
+
+The application is written using only the APIs provided by the browser and no external dependencies. This makes it possible to inspect and review the code to ensure that it has not been compromised.
 
 The entire application consists of a single HTML file that can be used offline by saving the it to disk and running it locally. The design makes it easy to use in a restricted environment like [Tails](https://tails.boum.org/) or in places where it is impossible to install applications like a public internet cafe.
 
 **Assumption:** TOTP keys are stored in a secure location that can be accessed from a web browser. You can safely transfer the key from storage into the application's input field (Copy/Paste or Manual typing using a hardware/virtual keyboard based on your threat model).
-
-## Design
-
-The application is written using only the APIs provided by the browser and no external dependencies. This makes it possible to inspect and review the code to ensure that it has not been compromised.
 
 ## Settings
 
