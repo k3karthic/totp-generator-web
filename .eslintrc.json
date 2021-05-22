@@ -4,11 +4,12 @@
         "es2021": true
     },
     "plugins": [
+        "prettier",
         "eslint-plugin-html"
     ],
     "extends": [
         "standard",
-        "plugin:prettier/recommended"
+        "prettier"
     ],
     "parserOptions": {
         "ecmaVersion": 12
