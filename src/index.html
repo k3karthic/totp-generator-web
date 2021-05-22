@@ -204,28 +204,7 @@
                         <div id="advanced-opts">
                             <div class="accordion-head">Advanced Options</div>
                             <div class="accordion-body">
-                                <label for="algo">HMAC Hash</label>
-                                <select name="algo" value="SHA-1">
-                                    <option value="SHA-1">SHA-1</option>
-                                    <option value="SHA-256">SHA-256</option>
-                                    <option value="SHA-512">SHA-512</option>
-                                </select>
-
-                                <label for="period">Period (seconds)</label>
-                                <input
-                                    name="period"
-                                    type="number"
-                                    value="30"
-                                    min="1"
-                                />
-
-                                <label for="digits">Digits</label>
-                                <input
-                                    name="digits"
-                                    type="number"
-                                    value="6"
-                                    min="1"
-                                />
+                                <my-advanced-input></my-advanced-input>
                             </div>
                         </div>
                     </div>
@@ -299,10 +278,100 @@
             END - Custom Element: my-secret-input 
         -->
 
+        <!--
+            START - Custom Element: my-advanced-input 
+        -->
+        <template id="my-advanced-input">
+            <label for="algo">HMAC Hash</label>
+            <select name="algo" value="SHA-1">
+                <option value="SHA-1">SHA-1</option>
+                <option value="SHA-256">SHA-256</option>
+                <option value="SHA-512">SHA-512</option>
+            </select>
+
+            <label for="period">Period (seconds)</label>
+            <input name="period" type="number" value="30" min="1" />
+
+            <label for="digits">Digits</label>
+            <input name="digits" type="number" value="6" min="1" />
+        </template>
         <script>
             ;(function () {
-                const validAlgos = new Set(['SHA-1', 'SHA-256', 'SHA-512'])
+                class MyAdvancedInput extends HTMLElement {
+                    constructor() {
+                        super()
 
+                        this.validAlgos = new Set([
+                            'SHA-1',
+                            'SHA-256',
+                            'SHA-512'
+                        ])
+                    }
+
+                    get hashAlgo() {
+                        const algoInput = document.querySelector(
+                            'select[name="algo"]'
+                        )
+
+                        if (algoInput && this.validAlgos.has(algoInput.value)) {
+                            return algoInput.value
+                        }
+
+                        return 'SHA-1'
+                    }
+
+                    get period() {
+                        const periodInput = document.querySelector(
+                            'input[name="period"]'
+                        )
+
+                        if (periodInput) {
+                            const periodNum = parseInt(periodInput.value)
+                            return !isNaN(periodNum) && periodNum > 0
+                                ? periodNum
+                                : 30
+                        }
+
+                        return 30
+                    }
+
+                    get numDigits() {
+                        const digitsInput = document.querySelector(
+                            'input[name="digits"]'
+                        )
+
+                        if (digitsInput) {
+                            const digitsNum = parseInt(digitsInput.value)
+                            return !isNaN(digitsNum) && digitsNum > 0
+                                ? digitsNum
+                                : 6
+                        }
+
+                        return 6
+                    }
+
+                    connectedCallback() {
+                        const template = document
+                            .querySelector('#my-advanced-input')
+                            .content.cloneNode(true)
+
+                        while (this.children.length > 0) {
+                            this.removeChild(this.children[0])
+                        }
+
+                        this.appendChild(template)
+                    }
+                }
+
+                customElements.define('my-advanced-input', MyAdvancedInput)
+            })()
+        </script>
+        <!--
+            END - Custom Element: my-advanced-input 
+        -->
+
+        <script>
+            ;(function () {
                 // Basic Accordion
                 const accHead = document.querySelector('.accordion-head')
                 if (accHead) {
@@ -542,43 +611,19 @@
                 // Trigger displayTotp and if successful register 1s updater
                 const btnHandler = async function () {
                     try {
-                        const keyStr = document.querySelector('my-secret-input')
-                            .secret
-
-                        let hashAlgorithm = 'SHA-1'
-                        let period = 30
-                        let numDigits = 6
-
-                        const algoInput = document.querySelector(
-                            'select[name="algo"]'
+                        const secretInput = document.querySelector(
+                            'my-secret-input'
                         )
-                        if (algoInput && validAlgos.has(algoInput.value)) {
-                            hashAlgorithm = algoInput.value
-                        }
-
-                        const periodInput = document.querySelector(
-                            'input[name="period"]'
+                        const advancedInput = document.querySelector(
+                            'my-advanced-input'
                         )
-                        if (periodInput) {
-                            const periodNum = parseInt(periodInput.value)
-                            period =
-                                !isNaN(periodNum) && periodNum > 0
-                                    ? periodNum
-                                    : period
-                        }
 
-                        const digitsInput = document.querySelector(
-                            'input[name="digits"]'
-                        )
-                        if (digitsInput) {
-                            const digitsNum = parseInt(digitsInput.value)
-                            numDigits =
-                                !isNaN(digitsNum) && digitsNum > 0
-                                    ? digitsNum
-                                    : numDigits
-                        }
-
-                        const args = [keyStr, hashAlgorithm, period, numDigits]
+                        const args = [
+                            secretInput.secret,
+                            advancedInput.hashAlgo,
+                            advancedInput.period,
+                            advancedInput.numDigits
+                        ]
 
                         const r = await displayTotp.apply(window, args)
 
