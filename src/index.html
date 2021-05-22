@@ -141,14 +141,6 @@
                 color: #fff;
                 background-color: red;
             }
-
-            #output button {
-                display: none;
-            }
-
-            #output button[show='true'] {
-                display: inline-block;
-            }
         </style>
     </head>
 
@@ -167,7 +159,7 @@
                     <div id="output" hidden>
                         <div class="separator"></div>
                         <div class="section content">
-                            <button>Copy</button>
+                            <my-copy><button>Copy</button></my-copy>
                             <span class="code">000000</span>
                             <span class="timer">00</span>
                         </div>
@@ -241,6 +233,51 @@
         </script>
         <!--
             END - Custom Element: my-accordion
+        -->
+
+        <!--
+            START - Custom Element: my-copy
+        -->
+        <style>
+            my-copy[hidden] {
+                display: none;
+            }
+        </style>
+        <script>
+            ;(function () {
+                class MyCopy extends HTMLElement {
+                    constructor() {
+                        super()
+
+                        this.clickHandler = this.clickHandler.bind(this)
+                    }
+
+                    connectedCallback() {
+                        if (navigator && navigator.clipboard) {
+                            this.addEventListener('click', this.clickHandler)
+                        } else {
+                            this.setAttribute('hidden', 'hidden')
+                        }
+                    }
+
+                    clickHandler() {
+                        const val = this.getAttribute('data-copy')
+                        if (val) {
+                            navigator.clipboard
+                                .writeText(val)
+                                .catch(function (err) {
+                                    console.log(err)
+                                    alert('Could not copy')
+                                })
+                        }
+                    }
+                }
+
+                customElements.define('my-copy', MyCopy)
+            })()
+        </script>
+        <!--
+            END - Custom Element: my-copy
         -->
 
         <!--
@@ -453,28 +490,6 @@
 
         <script>
             ;(function () {
-                // Enable copy if Clipboard API available
-                if (navigator && navigator.clipboard) {
-                    const copy = document.querySelector('#output button')
-                    if (copy) {
-                        copy.setAttribute('show', 'true')
-
-                        copy.onclick = function () {
-                            const codeOutput = document.querySelector(
-                                '#output .code'
-                            )
-                            if (codeOutput) {
-                                navigator.clipboard
-                                    .writeText(codeOutput.innerText)
-                                    .catch(function (err) {
-                                        console.log(err)
-                                        alert('Could not copy')
-                                    })
-                            }
-                        }
-                    }
-                }
-
                 // Map base32 character to 5 bit binary
                 const base32Map = {
                     2: '11010',
@@ -625,6 +640,11 @@
 
                     try {
                         const code = await totp.apply(this, arguments)
+
+                        const codeCopy = document.querySelector('my-copy')
+                        if (codeCopy) {
+                            codeCopy.setAttribute('data-copy', code)
+                        }
 
                         const codeOutput = document.querySelector(
                             '#output .code'
