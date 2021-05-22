@@ -199,7 +199,7 @@
                 <div id="input-card">
                     <div id="opts" class="section">
                         <div id="basic-opts">
-                            <label for="key">Secret (Base32)</label>
+                            <label for="key">Secret</label>
                             <input
                                 name="key"
                                 type="password"
@@ -264,6 +264,7 @@
         <script>
             ;(function () {
                 const validAlgos = new Set(['SHA-1', 'SHA-256', 'SHA-512'])
+                const spaceR = new RegExp(/ /, 'g')
 
                 // Basic Accordion
                 const accHead = document.querySelector('.accordion-head')
@@ -514,6 +515,8 @@
                             return alert('Please enter a secret key')
                         }
 
+                        const keyStr = keyInput.value.toUpperCase().replace(spaceR, '')
+
                         let hashAlgorithm = 'SHA-1'
                         let period = 30
                         let numDigits = 6
@@ -548,7 +551,7 @@
                         }
 
                         const args = [
-                            keyInput.value,
+                            keyStr,
                             hashAlgorithm,
                             period,
                             numDigits

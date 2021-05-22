@@ -3,7 +3,7 @@
 
         <!-- 'sha256-iN7wpJdxHlpujRppkOA8N0+Mzp0ZqZr3lCtxM00Y63c=' is for the script injected by live-server -->
         <!-- ws://127.0.0.1:* is to allow auto reload by live-server -->
-        <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-UyKZDsVR70eoXnITftBoVpRKJuwA4DejWv5+KBnfM8U=' 'sha256-iN7wpJdxHlpujRppkOA8N0+Mzp0ZqZr3lCtxM00Y63c='; style-src 'sha256-xDlR2shwIr6TxhGLiTuZvR+RwofFi2Vm6VHQNGk5JsE='; img-src data:; connect-src ws://127.0.0.1:*">
+        <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-yrOAa5hFyuiehFExlfs3KSrV6N/njSo1AH+i0OM+vHs=' 'sha256-iN7wpJdxHlpujRppkOA8N0+Mzp0ZqZr3lCtxM00Y63c='; style-src 'sha256-xDlR2shwIr6TxhGLiTuZvR+RwofFi2Vm6VHQNGk5JsE='; img-src data:; connect-src ws://127.0.0.1:*">
 
         <title>TOTP Generator</title>
         <meta name="description" content="Generate TOTP codes from your browser">
@@ -188,7 +188,7 @@
                 <div id="input-card">
                     <div id="opts" class="section">
                         <div id="basic-opts">
-                            <label for="key">Secret (Base32)</label>
+                            <label for="key">Secret</label>
                             <input name="key" type="password" value="XY7MXDNK5ZEKJT4Y">
                         </div>
                         <div id="advanced-opts">
@@ -236,6 +236,7 @@
         <script>
             ;(function () {
                 const validAlgos = new Set(['SHA-1', 'SHA-256', 'SHA-512'])
+                const spaceR = new RegExp(/ /, 'g')
 
                 // Basic Accordion
                 const accHead = document.querySelector('.accordion-head')
@@ -486,6 +487,8 @@
                             return alert('Please enter a secret key')
                         }
 
+                        const keyStr = keyInput.value.toUpperCase().replace(spaceR, '')
+
                         let hashAlgorithm = 'SHA-1'
                         let period = 30
                         let numDigits = 6
@@ -520,7 +523,7 @@
                         }
 
                         const args = [
-                            keyInput.value,
+                            keyStr,
                             hashAlgorithm,
                             period,
                             numDigits

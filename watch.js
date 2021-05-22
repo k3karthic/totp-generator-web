@@ -40,13 +40,27 @@ const calcHashes = function (arr) {
  * Main
  */
 
-fs.watch(srcFile, (event, filename) => {
+fs.watch(srcFile, async (event, filename) => {
     if (!filename) {
         return
     }
 
     // Read and parse src/index.html
-    const src = fs.readFileSync(srcFile, 'utf-8')
+    let src 
+    
+    while (true) {
+        src = fs.readFileSync(srcFile, 'utf-8')
+        
+        if (src) {
+            break
+        }
+
+        await new Promise((resolve) => {
+            console.log('waiting...')
+            setTimeout(resolve, 1000)
+        })
+    }
+    
     const dom = new JSDOM(src)
 
     // Calculate sha256 hashes of script tags

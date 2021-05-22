@@ -22,7 +22,10 @@ The default settings are configured to be compatible with Google Authenticator,
 
 The values can be customized using the "Advanced Options" menu.
 
-Currently, you can only enter the secret key in Base32 format.
+Currently, you can only enter the secret key in the following formats,
+
+-   Base32 - e.g. XY7MXDNK5ZEKJT4Y
+-   Base32 lowercased with spaces - e.g. g5od kqdo hqkd 4kup qr2d txc2 2cfh wylh
 
 ## Web Technologies Used
 
