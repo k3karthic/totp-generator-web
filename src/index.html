@@ -156,14 +156,7 @@
                         <button id="generate">Generate</button>
                     </div>
 
-                    <div id="output" hidden>
-                        <div class="separator"></div>
-                        <div class="section content">
-                            <my-copy><button>Copy</button></my-copy>
-                            <span class="code">000000</span>
-                            <span class="timer">00</span>
-                        </div>
-                    </div>
+                    <div id="output" hidden></div>
                 </div>
             </div>
         </div>
@@ -488,209 +481,242 @@
             END - Custom Element: my-advanced-input 
         -->
 
+        <!--
+            START - Custom Element: my-totp-entry
+        -->
+        <template id="my-totp-entry">
+            <div class="separator"></div>
+            <div class="section content">
+                <my-copy><button>Copy</button></my-copy>
+                <span class="code">------</span>
+                <span class="timer">00</span>
+            </div>
+        </template>
+        <style></style>
         <script>
             ;(function () {
-                // Map base32 character to 5 bit binary
-                const base32Map = {
-                    2: '11010',
-                    3: '11011',
-                    4: '11100',
-                    5: '11101',
-                    6: '11110',
-                    7: '11111',
-                    A: '00000',
-                    B: '00001',
-                    C: '00010',
-                    D: '00011',
-                    E: '00100',
-                    F: '00101',
-                    G: '00110',
-                    H: '00111',
-                    I: '01000',
-                    J: '01001',
-                    K: '01010',
-                    L: '01011',
-                    M: '01100',
-                    N: '01101',
-                    O: '01110',
-                    P: '01111',
-                    Q: '10000',
-                    R: '10001',
-                    S: '10010',
-                    T: '10011',
-                    U: '10100',
-                    V: '10101',
-                    W: '10110',
-                    X: '10111',
-                    Y: '11000',
-                    Z: '11001'
-                }
+                class MyTotpEntry extends HTMLElement {
+                    constructor() {
+                        super()
 
-                // Reference - https://github.com/bellstrand/totp-generator/blob/master/index.js#L32
-                const base32ToUint8 = function (input) {
-                    let inputBinary = ''
-
-                    for (let i = 0; i < input.length; i++) {
-                        const c = input[i]
-
-                        if (c === '=') {
-                            inputBinary += '00000'
+                        // Map base32 character to 5 bit binary
+                        this.base32Map = {
+                            2: '11010',
+                            3: '11011',
+                            4: '11100',
+                            5: '11101',
+                            6: '11110',
+                            7: '11111',
+                            A: '00000',
+                            B: '00001',
+                            C: '00010',
+                            D: '00011',
+                            E: '00100',
+                            F: '00101',
+                            G: '00110',
+                            H: '00111',
+                            I: '01000',
+                            J: '01001',
+                            K: '01010',
+                            L: '01011',
+                            M: '01100',
+                            N: '01101',
+                            O: '01110',
+                            P: '01111',
+                            Q: '10000',
+                            R: '10001',
+                            S: '10010',
+                            T: '10011',
+                            U: '10100',
+                            V: '10101',
+                            W: '10110',
+                            X: '10111',
+                            Y: '11000',
+                            Z: '11001'
                         }
 
-                        const num = base32Map[c]
-                        if (num === undefined) {
-                            throw new Error(`Invaliad base32 key: ${c}`)
+                        this.renderContent = this.renderContent.bind(this)
+                    }
+
+                    get secret() {
+                        return this._secret
+                    }
+
+                    set secret(val) {
+                        this._key = undefined
+                        this._secret = val
+                    }
+
+                    connectedCallback() {
+                        this.__h = window.setInterval(this.renderContent, 1000)
+                    }
+
+                    disconnectedCallback() {
+                        if (this.__h) {
+                            window.clearInterval(this.__h)
+                            this.__h = undefined
+                        }
+                    }
+
+                    async renderContent() {
+                        const code = await this.generateCode()
+                        const template = document
+                            .querySelector('#my-totp-entry')
+                            .content.cloneNode(true)
+
+                        template.querySelector('.code').innerText = code
+                        template
+                            .querySelector('my-copy')
+                            .setAttribute('data-copy', code)
+
+                        const timerOutput = template.querySelector('.timer')
+
+                        const tsLeft =
+                            this.period -
+                            (Math.round(Date.now() / 1000) % this.period)
+
+                        timerOutput.innerText = tsLeft
+                            .toString()
+                            .padStart(2, '0')
+
+                        if (tsLeft <= 5) {
+                            timerOutput.removeAttribute('warning')
+                            timerOutput.setAttribute('alert', 'true')
+                        } else if (tsLeft <= 15) {
+                            timerOutput.removeAttribute('alert')
+                            timerOutput.setAttribute('warning', 'true')
+                        } else {
+                            timerOutput.removeAttribute('alert')
+                            timerOutput.removeAttribute('warning')
                         }
 
-                        inputBinary += num
-                    }
-
-                    if (inputBinary.length % 8 !== 0) {
-                        throw new Error(
-                            `Invalid base32 size: ${inputBinary.length} bits`
-                        )
-                    }
-
-                    const output = []
-
-                    for (let i = 0; i < inputBinary.length; i += 8) {
-                        const byte = inputBinary.substr(i, 8)
-                        output.push(parseInt(byte, 2))
-                    }
-
-                    return new Uint8Array(output)
-                }
-
-                const decimalToUint8 = function (num) {
-                    const arr = []
-
-                    let n = num
-                    while (n > 0) {
-                        const digit = n % 16
-                        arr.unshift(digit.toString(16))
-
-                        n = Math.floor(n / 16)
-                    }
-
-                    let str = arr.join('')
-                    const strL = str.length
-
-                    const padL = strL < 16 ? 16 - strL : strL % 16
-                    str = str.padStart(padL + strL, '0')
-
-                    const outArr = []
-                    for (let i = 0; i < str.length; i += 2) {
-                        outArr.push(parseInt(str.substr(i, 2), 16))
-                    }
-
-                    return Uint8Array.from(outArr)
-                }
-
-                const totp = async function (
-                    keyStr,
-                    hashAlgorithm,
-                    period,
-                    numDigits
-                ) {
-                    const keyUint = base32ToUint8(keyStr)
-
-                    const algorithm = {
-                        name: 'HMAC',
-                        hash: hashAlgorithm
-                    }
-
-                    const key = await window.crypto.subtle.importKey(
-                        'raw',
-                        keyUint,
-                        algorithm,
-                        true,
-                        ['sign']
-                    )
-
-                    // https://tools.ietf.org/html/rfc6238#section-4
-                    const nowUnix = Math.round(Date.now() / 1000)
-                    const t = Math.floor((nowUnix - 0) / period) // Assuming T0 = 0
-                    const data = decimalToUint8(t)
-
-                    const hmacBuffer = await window.crypto.subtle.sign(
-                        algorithm,
-                        key,
-                        data
-                    )
-                    const hmac = new Uint8Array(hmacBuffer)
-
-                    // https://tools.ietf.org/html/rfc4226#section-5.4
-                    const offset = hmac[19] & 0xf
-                    const binCode =
-                        ((hmac[offset] & 0x7f) << 24) |
-                        ((hmac[offset + 1] & 0xff) << 16) |
-                        ((hmac[offset + 2] & 0xff) << 8) |
-                        (hmac[offset + 3] & 0xff)
-                    const code = binCode % Math.pow(10, numDigits)
-
-                    return code
-                }
-
-                // Hold setInterval result
-                let intervalHandler
-
-                // Generate TOTP and update output HTML
-                const displayTotp = async function () {
-                    const period = arguments[2]
-
-                    try {
-                        const code = await totp.apply(this, arguments)
-
-                        const codeCopy = document.querySelector('my-copy')
-                        if (codeCopy) {
-                            codeCopy.setAttribute('data-copy', code)
+                        while (this.children.length > 0) {
+                            this.removeChild(this.children[0])
                         }
 
-                        const codeOutput = document.querySelector(
-                            '#output .code'
-                        )
-                        if (codeOutput) {
-                            codeOutput.innerText = code
-                        }
+                        this.appendChild(template)
+                    }
 
-                        const timerOutput = document.querySelector(
-                            '#output .timer'
-                        )
-                        if (timerOutput) {
-                            const tsLeft =
-                                period -
-                                (Math.round(Date.now() / 1000) % period)
+                    // Reference - https://github.com/bellstrand/totp-generator/blob/master/index.js#L32
+                    base32ToUint8(input) {
+                        let inputBinary = ''
 
-                            timerOutput.innerText = tsLeft
-                                .toString()
-                                .padStart(2, '0')
+                        for (let i = 0; i < input.length; i++) {
+                            const c = input[i]
 
-                            if (tsLeft <= 5) {
-                                timerOutput.removeAttribute('warning')
-                                timerOutput.setAttribute('alert', 'true')
-                            } else if (tsLeft <= 15) {
-                                timerOutput.removeAttribute('alert')
-                                timerOutput.setAttribute('warning', 'true')
-                            } else {
-                                timerOutput.removeAttribute('alert')
-                                timerOutput.removeAttribute('warning')
+                            if (c === '=') {
+                                inputBinary += '00000'
                             }
+
+                            const num = this.base32Map[c]
+                            if (num === undefined) {
+                                throw new Error(`Invaliad base32 key: ${c}`)
+                            }
+
+                            inputBinary += num
                         }
 
-                        return true
-                    } catch (err) {
-                        console.log(err)
-
-                        if (intervalHandler) {
-                            clearInterval(intervalHandler)
+                        if (inputBinary.length % 8 !== 0) {
+                            throw new Error(
+                                `Invalid base32 size: ${inputBinary.length} bits`
+                            )
                         }
 
-                        alert(err.message)
+                        const output = []
+
+                        for (let i = 0; i < inputBinary.length; i += 8) {
+                            const byte = inputBinary.substr(i, 8)
+                            output.push(parseInt(byte, 2))
+                        }
+
+                        return new Uint8Array(output)
                     }
 
-                    return false
+                    decimalToUint8(num) {
+                        const arr = []
+
+                        let n = num
+                        while (n > 0) {
+                            const digit = n % 16
+                            arr.unshift(digit.toString(16))
+
+                            n = Math.floor(n / 16)
+                        }
+
+                        let str = arr.join('')
+                        const strL = str.length
+
+                        const padL = strL < 16 ? 16 - strL : strL % 16
+                        str = str.padStart(padL + strL, '0')
+
+                        const outArr = []
+                        for (let i = 0; i < str.length; i += 2) {
+                            outArr.push(parseInt(str.substr(i, 2), 16))
+                        }
+
+                        return Uint8Array.from(outArr)
+                    }
+
+                    async generateCode() {
+                        if (!this._key) {
+                            const keyUint = this.base32ToUint8(this._secret)
+
+                            this.algorithm = {
+                                name: 'HMAC',
+                                hash: this.hashAlgo
+                            }
+
+                            this._key = await window.crypto.subtle.importKey(
+                                'raw',
+                                keyUint,
+                                this.algorithm,
+                                true,
+                                ['sign']
+                            )
+                        }
+
+                        // https://tools.ietf.org/html/rfc6238#section-4
+                        const nowUnix = Math.round(Date.now() / 1000)
+                        const t = Math.floor((nowUnix - 0) / this.period) // Assuming T0 = 0
+
+                        if (this._previousT === t) {
+                            return this._previousCode
+                        }
+
+                        const data = this.decimalToUint8(t)
+
+                        const hmacBuffer = await window.crypto.subtle.sign(
+                            this.algorithm,
+                            this._key,
+                            data
+                        )
+                        const hmac = new Uint8Array(hmacBuffer)
+
+                        // https://tools.ietf.org/html/rfc4226#section-5.4
+                        const offset = hmac[19] & 0xf
+                        const binCode =
+                            ((hmac[offset] & 0x7f) << 24) |
+                            ((hmac[offset + 1] & 0xff) << 16) |
+                            ((hmac[offset + 2] & 0xff) << 8) |
+                            (hmac[offset + 3] & 0xff)
+                        const code = binCode % Math.pow(10, this.numDigits)
+
+                        this._previousT = t
+                        this._previousCode = code
+
+                        return code
+                    }
                 }
 
+                customElements.define('my-totp-entry', MyTotpEntry)
+            })()
+        </script>
+        <!--
+            END - Custom Element: my-totp-entry
+        -->
+
+        <script>
+            ;(function () {
                 // Trigger displayTotp and if successful register 1s updater
                 const btnHandler = async function () {
                     try {
@@ -701,27 +727,16 @@
                             'my-advanced-input'
                         )
 
-                        const args = [
-                            secretInput.secret,
-                            advancedInput.hashAlgo,
-                            advancedInput.period,
-                            advancedInput.numDigits
-                        ]
+                        const entry = document.createElement('my-totp-entry')
+                        entry.secret = secretInput.secret
+                        entry.hashAlgo = advancedInput.hashAlgo
+                        entry.period = advancedInput.period
+                        entry.numDigits = advancedInput.numDigits
 
-                        const r = await displayTotp.apply(window, args)
-
-                        if (r) {
-                            if (intervalHandler) {
-                                clearInterval(intervalHandler)
-                            }
-
-                            intervalHandler = setInterval(function () {
-                                displayTotp.apply(window, args)
-                            }, 1000)
-
-                            const output = document.querySelector('#output')
-                            output.removeAttribute('hidden')
-                        }
+                        document.querySelector('#output').appendChild(entry)
+                        document
+                            .querySelector('#output')
+                            .removeAttribute('hidden')
                     } catch (err) {
                         console.log(err)
                         alert(err.message)
