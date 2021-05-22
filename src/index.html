@@ -199,12 +199,7 @@
                 <div id="input-card">
                     <div id="opts" class="section">
                         <div id="basic-opts">
-                            <label for="key">Secret</label>
-                            <input
-                                name="key"
-                                type="password"
-                                value="XY7MXDNK5ZEKJT4Y"
-                            />
+                            <my-secret-input></my-secret-input>
                         </div>
                         <div id="advanced-opts">
                             <div class="accordion-head">Advanced Options</div>
@@ -261,10 +256,52 @@
             by <a href="https://behance.net/antitomi">Tomislava Babić</a>
         </footer>
 
+        <!--
+            START - Custom Element: my-secret-input 
+        -->
+        <template id="my-secret-input">
+            <label for="key">Secret</label>
+            <input name="key" type="password" value="XY7MXDNK5ZEKJT4Y" />
+        </template>
+        <script>
+            ;(function () {
+                class MySecretInput extends HTMLElement {
+                    constructor() {
+                        super()
+
+                        this.spaceR = / /g
+                    }
+
+                    get secret() {
+                        const input = this.querySelector('input')
+                        const value = input.value || ''
+
+                        return value.toUpperCase().replace(this.spaceR, '')
+                    }
+
+                    connectedCallback() {
+                        const template = document
+                            .querySelector('#my-secret-input')
+                            .content.cloneNode(true)
+
+                        while (this.children.length > 0) {
+                            this.removeChild(this.children[0])
+                        }
+
+                        this.appendChild(template)
+                    }
+                }
+
+                customElements.define('my-secret-input', MySecretInput)
+            })()
+        </script>
+        <!--
+            END - Custom Element: my-secret-input 
+        -->
+
         <script>
             ;(function () {
                 const validAlgos = new Set(['SHA-1', 'SHA-256', 'SHA-512'])
-                const spaceR = new RegExp(/ /, 'g')
 
                 // Basic Accordion
                 const accHead = document.querySelector('.accordion-head')
@@ -505,17 +542,8 @@
                 // Trigger displayTotp and if successful register 1s updater
                 const btnHandler = async function () {
                     try {
-                        const keyInput = document.querySelector(
-                            'input[name="key"]'
-                        )
-                        if (!keyInput) {
-                            return alert('Unable to find Secret Key input')
-                        }
-                        if (!keyInput.value) {
-                            return alert('Please enter a secret key')
-                        }
-
-                        const keyStr = keyInput.value.toUpperCase().replace(spaceR, '')
+                        const keyStr = document.querySelector('my-secret-input')
+                            .secret
 
                         let hashAlgorithm = 'SHA-1'
                         let period = 30
@@ -550,12 +578,7 @@
                                     : numDigits
                         }
 
-                        const args = [
-                            keyStr,
-                            hashAlgorithm,
-                            period,
-                            numDigits
-                        ]
+                        const args = [keyStr, hashAlgorithm, period, numDigits]
 
                         const r = await displayTotp.apply(window, args)
 
