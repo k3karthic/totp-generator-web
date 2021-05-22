@@ -84,7 +84,22 @@
             START - Custom Element: my-accordion
         -->
         <template id="my-app">
-            <div class="card">
+            <article class="card mirrors">
+                <h1>Alternate Mirrors</h1>
+                <section class="links">
+                    <ul>
+                        <li>
+                            <span><a href="https://ipfs.io" target="_blank">InterPlanetary File System (IPFS)</a>: /ipns/k51qzi5uqu5dii8e5k7q6qpbz91or4gjluu2egnrtm6lkhb15lwok3a0ylxqf9</span>
+                            <ul>
+                                <li><a href="https://cloudflare-ipfs.com/ipns/k51qzi5uqu5dii8e5k7q6qpbz91or4gjluu2egnrtm6lkhb15lwok3a0ylxqf9" target="_blank">View using CloudFlare</a></li>
+                                <li><a href="https://gateway.ipfs.io/ipns/k51qzi5uqu5dii8e5k7q6qpbz91or4gjluu2egnrtm6lkhb15lwok3a0ylxqf9" target="_blank">View using ipfs.io</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </section>
+            </article>
+            
+            <div class="main card">
                 <my-input class="section"></my-input>
 
                 <div class="separator"></div>
@@ -106,17 +121,26 @@
                 min-height: calc(100% - 1rem - 2rem);
                 width: 100%;
 
-                padding: 1rem 0;
+                padding: 1rem;
             }
 
             my-app .card {
                 margin: 0 auto;
                 text-align: left;
                 width: 100%;
-                max-width: 25rem;
+                max-width: 40rem;
                 background: #fff;
                 border-radius: 0.4rem;
                 border: 1px solid silver;
+                margin-bottom: 1rem;
+            }
+
+            my-app .card:last-child {
+                margin-bottom: 0;
+            }
+
+            my-app .main.card {
+                max-width: 25rem;
             }
 
             my-app .card .section {
@@ -126,6 +150,24 @@
             my-app .card .separator {
                 border-top: 0.0625rem solid silver;
                 margin: 0.25rem 0;
+            }
+
+            my-app .mirrors {
+                word-break: break-all;
+            }
+
+            my-app .mirrors h1 {
+                margin: 0;
+                padding: 0.5rem 1rem;
+            }
+
+            my-app .links {
+                padding: 0 1rem;
+            }
+
+            my-app .links > ul {
+                margin-bottom: 1rem;
+                margin-top: 0;
             }
 
             my-app .controls button {

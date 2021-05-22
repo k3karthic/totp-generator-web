@@ -3,7 +3,7 @@
 
         <!-- is for the script injected by live-server -->
         <!-- ws://127.0.0.1:* is to allow auto reload by live-server -->
-        <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-rgwrLf2vwdC0dHgCeJLbyQ9cLZDfCQ0xglkgFi7fKA8=' 'sha256-+zTR9PZzithE9P8T/dAaAnArsO09l6+xc0x5dtNJ+rE=' 'sha256-p0mbVG5xFNY4oMkFswBNXDWXddmOyakOw4abp296sG0=' 'sha256-Ab8/tAwGli24GTONKmItqTGVrrT1SOYoTOF16X6Y638=' 'sha256-f0Uzgv1OQn868t2Lz/Eq8E/2zafFOlDJks49lD5pfx8=' 'sha256-1dczJg7h2dFYi5+N9A5Gl/n2HRjt3qc9Ku8u/yG4wEU=' 'sha256-dN2XRLmKPOgk4ezD8RDOozgjM95nipnCMrOwopyT5BU='; style-src 'sha256-TzIBSUu/casJFqf8MXqumFE0hqtHj4wdguEm3ZUfXps=' 'sha256-9t2fj97KrvbDTDngkXnzj9tykaKDcu2jezDQuV46/0A=' 'sha256-8lTJcs5sZlwcpuWjO2AkT8Cg9m212m/audEFwOoQWTc=' 'sha256-N0HRMEWYkO/arc+Xl05f8gfc0uI6UbxTHAJcDIM6+Wo=' 'sha256-5HbKuM7oipb3zFnVVCVuHyHseGFzuIYmZbb938q6Hh0=' 'sha256-g6o/4Jo5s2FghEW2cjJAx+aLK87vCR6G/RdOk+q06G4='; img-src data:;">
+        <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-rgwrLf2vwdC0dHgCeJLbyQ9cLZDfCQ0xglkgFi7fKA8=' 'sha256-+zTR9PZzithE9P8T/dAaAnArsO09l6+xc0x5dtNJ+rE=' 'sha256-p0mbVG5xFNY4oMkFswBNXDWXddmOyakOw4abp296sG0=' 'sha256-Ab8/tAwGli24GTONKmItqTGVrrT1SOYoTOF16X6Y638=' 'sha256-f0Uzgv1OQn868t2Lz/Eq8E/2zafFOlDJks49lD5pfx8=' 'sha256-1dczJg7h2dFYi5+N9A5Gl/n2HRjt3qc9Ku8u/yG4wEU=' 'sha256-dN2XRLmKPOgk4ezD8RDOozgjM95nipnCMrOwopyT5BU='; style-src 'sha256-TzIBSUu/casJFqf8MXqumFE0hqtHj4wdguEm3ZUfXps=' 'sha256-Pw9eVGiveYrNWip/nX2VjZbwxwBWAk+0XgHkfFAN134=' 'sha256-8lTJcs5sZlwcpuWjO2AkT8Cg9m212m/audEFwOoQWTc=' 'sha256-N0HRMEWYkO/arc+Xl05f8gfc0uI6UbxTHAJcDIM6+Wo=' 'sha256-5HbKuM7oipb3zFnVVCVuHyHseGFzuIYmZbb938q6Hh0=' 'sha256-g6o/4Jo5s2FghEW2cjJAx+aLK87vCR6G/RdOk+q06G4='; img-src data:;">
 
         <title>TOTP Generator</title>
         <meta name="description" content="Generate TOTP codes from your browser">
@@ -70,7 +70,22 @@
             START - Custom Element: my-accordion
         -->
         <template id="my-app">
-            <div class="card">
+            <article class="card mirrors">
+                <h1>Alternate Mirrors</h1>
+                <section class="links">
+                    <ul>
+                        <li>
+                            <span><a href="https://ipfs.io" target="_blank">InterPlanetary File System (IPFS)</a>: /ipns/k51qzi5uqu5dii8e5k7q6qpbz91or4gjluu2egnrtm6lkhb15lwok3a0ylxqf9</span>
+                            <ul>
+                                <li><a href="https://cloudflare-ipfs.com/ipns/k51qzi5uqu5dii8e5k7q6qpbz91or4gjluu2egnrtm6lkhb15lwok3a0ylxqf9" target="_blank">View using CloudFlare</a></li>
+                                <li><a href="https://gateway.ipfs.io/ipns/k51qzi5uqu5dii8e5k7q6qpbz91or4gjluu2egnrtm6lkhb15lwok3a0ylxqf9" target="_blank">View using ipfs.io</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </section>
+            </article>
+            
+            <div class="main card">
                 <my-input class="section"></my-input>
 
                 <div class="separator"></div>
@@ -92,17 +107,26 @@
                 min-height: calc(100% - 1rem - 2rem);
                 width: 100%;
 
-                padding: 1rem 0;
+                padding: 1rem;
             }
 
             my-app .card {
                 margin: 0 auto;
                 text-align: left;
                 width: 100%;
-                max-width: 25rem;
+                max-width: 40rem;
                 background: #fff;
                 border-radius: 0.4rem;
                 border: 1px solid silver;
+                margin-bottom: 1rem;
+            }
+
+            my-app .card:last-child {
+                margin-bottom: 0;
+            }
+
+            my-app .main.card {
+                max-width: 25rem;
             }
 
             my-app .card .section {
@@ -112,6 +136,24 @@
             my-app .card .separator {
                 border-top: 0.0625rem solid silver;
                 margin: 0.25rem 0;
+            }
+
+            my-app .mirrors {
+                word-break: break-all;
+            }
+
+            my-app .mirrors h1 {
+                margin: 0;
+                padding: 0.5rem 1rem;
+            }
+
+            my-app .links {
+                padding: 0 1rem;
+            }
+
+            my-app .links > ul {
+                margin-bottom: 1rem;
+                margin-top: 0;
             }
 
             my-app .controls button {
