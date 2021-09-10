@@ -4,7 +4,7 @@ Generate [TOTP](https://en.wikipedia.org/wiki/Time-based_One-Time_Password) code
 
 Demo: [https://totp.maverickgeek.xyz/](https://totp.maverickgeek.xyz/)
 
-![Application Screenshot](https://github.com/k3karthic/totp-generator-web/raw/main/resources/screenshot.png)
+![Application Screenshot](raw/main/resources/screenshot.png)
 
 ## Design
 
