@@ -2,6 +2,8 @@
 
 Generate [TOTP](https://en.wikipedia.org/wiki/Time-based_One-Time_Password) codes directly in your browser for Two-Factor Authentication (2FA). Compatible with authenticator applications like [Google Authenticator](https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2&hl=en_IN&gl=US), [Authy](https://authy.com/) and [Microsoft Authenticator](https://www.microsoft.com/en-in/account/authenticator).
 
+Demo: [https://totp.maverickgeek.xyz/](https://totp.maverickgeek.xyz/)
+
 ![Application Screenshot](https://github.com/k3karthic/totp-generator-web/raw/main/resources/screenshot.png)
 
 ## Design
