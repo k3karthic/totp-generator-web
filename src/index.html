@@ -751,9 +751,16 @@
                         }
 
                         if (inputBinary.length % 8 !== 0) {
-                            throw new Error(
-                                `Invalid base32 size: ${inputBinary.length} bits`
-                            )
+                            if (inputBinary.length > 8) {
+                                inputBinary = inputBinary.slice(
+                                    0, 
+                                    inputBinary.length - (inputBinary.length % 8)
+                                )
+                            } else {
+                                throw new Error(
+                                    `Invalid base32 size: ${inputBinary.length} bits`
+                                )
+                            }
                         }
 
                         const output = []
