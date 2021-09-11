@@ -110,7 +110,7 @@
             </article>
             
             <div class="main card">
-                <my-input class="section"></my-input>
+                <my-input></my-input>
 
                 <div class="separator"></div>
 
@@ -202,6 +202,8 @@
                     }
 
                     connectedCallback() {
+                        this.addEventListener('generate', this.clickHandler)
+
                         const template = document
                             .querySelector('#my-app')
                             .content.cloneNode(true)
@@ -261,7 +263,23 @@
             }
 
             my-accordion .my-accordion-header {
+                display: flex;
+                align-items: center;
+                
                 cursor: pointer;
+                font-weight: bold;
+                font-size: 1.1rem;
+            }
+
+            my-accordion .my-accordion-header::after {
+                content: ' ➤';
+                font-size: 0.5rem;
+                margin-left: 0.25rem;
+            }
+
+            my-accordion .my-accordion-header[open]::after {
+                content: ' ▼';
+                font-size: 0.75rem;
             }
 
             my-accordion .my-accordion-body {
@@ -270,6 +288,7 @@
 
             my-accordion .my-accordion-body[show] {
                 display: block;
+                margin-top: 0.5rem;
             }
         </style>
         <script>
@@ -294,11 +313,14 @@
                     }
 
                     toggleAccordion() {
+                        const header = this.querySelector('.my-accordion-header')
                         const body = this.querySelector('.my-accordion-body')
 
                         if (body.hasAttribute('show')) {
+                            header.removeAttribute('open')
                             body.removeAttribute('show')
                         } else {
+                            header.setAttribute('open', 'open')
                             body.setAttribute('show', 'show')
                         }
                     }
@@ -386,16 +408,19 @@
                 border: 1px solid silver;
                 border-radius: 0.25rem;
                 margin: 0.25rem 0;
+                background: #fff;
+            }
+
+            my-input my-secret-input {
+                display: block;
+                padding: 0.5rem 1rem;
+                border-bottom: 1px solid lightgray;
             }
 
             my-input my-accordion {
-                margin-top: 1rem;
-            }
-
-            my-input my-accordion .my-accordion-header {
-                font-weight: bold;
-                text-decoration: underline;
-                font-size: 1.1rem;
+                display: block;
+                padding: 0.5rem 1rem;
+                padding-bottom: 0.25rem;
             }
 
             my-input my-advanced-input label {

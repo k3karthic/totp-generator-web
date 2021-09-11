@@ -3,7 +3,7 @@
 
         <!-- 'sha256-iN7wpJdxHlpujRppkOA8N0+Mzp0ZqZr3lCtxM00Y63c=' is for the script injected by live-server -->
         <!-- ws://127.0.0.1:* is to allow auto reload by live-server -->
-        <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-rgwrLf2vwdC0dHgCeJLbyQ9cLZDfCQ0xglkgFi7fKA8=' 'sha256-+zTR9PZzithE9P8T/dAaAnArsO09l6+xc0x5dtNJ+rE=' 'sha256-p0mbVG5xFNY4oMkFswBNXDWXddmOyakOw4abp296sG0=' 'sha256-Ab8/tAwGli24GTONKmItqTGVrrT1SOYoTOF16X6Y638=' 'sha256-f0Uzgv1OQn868t2Lz/Eq8E/2zafFOlDJks49lD5pfx8=' 'sha256-1dczJg7h2dFYi5+N9A5Gl/n2HRjt3qc9Ku8u/yG4wEU=' 'sha256-dN2XRLmKPOgk4ezD8RDOozgjM95nipnCMrOwopyT5BU=' 'sha256-iN7wpJdxHlpujRppkOA8N0+Mzp0ZqZr3lCtxM00Y63c='; style-src 'sha256-TzIBSUu/casJFqf8MXqumFE0hqtHj4wdguEm3ZUfXps=' 'sha256-Pw9eVGiveYrNWip/nX2VjZbwxwBWAk+0XgHkfFAN134=' 'sha256-8lTJcs5sZlwcpuWjO2AkT8Cg9m212m/audEFwOoQWTc=' 'sha256-N0HRMEWYkO/arc+Xl05f8gfc0uI6UbxTHAJcDIM6+Wo=' 'sha256-5HbKuM7oipb3zFnVVCVuHyHseGFzuIYmZbb938q6Hh0=' 'sha256-g6o/4Jo5s2FghEW2cjJAx+aLK87vCR6G/RdOk+q06G4='; img-src data:; connect-src ws://127.0.0.1:*">
+        <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-/TFscxqEWlykBIfVeNJstp7XJxQ++zzo1iNezlzr9f4=' 'sha256-YCk7dCiM0RIrf8BZF3J9mlvp8g3yRUuMfoBiV6B45ro=' 'sha256-p0mbVG5xFNY4oMkFswBNXDWXddmOyakOw4abp296sG0=' 'sha256-Ab8/tAwGli24GTONKmItqTGVrrT1SOYoTOF16X6Y638=' 'sha256-f0Uzgv1OQn868t2Lz/Eq8E/2zafFOlDJks49lD5pfx8=' 'sha256-1dczJg7h2dFYi5+N9A5Gl/n2HRjt3qc9Ku8u/yG4wEU=' 'sha256-dN2XRLmKPOgk4ezD8RDOozgjM95nipnCMrOwopyT5BU=' 'sha256-iN7wpJdxHlpujRppkOA8N0+Mzp0ZqZr3lCtxM00Y63c='; style-src 'sha256-TzIBSUu/casJFqf8MXqumFE0hqtHj4wdguEm3ZUfXps=' 'sha256-Pw9eVGiveYrNWip/nX2VjZbwxwBWAk+0XgHkfFAN134=' 'sha256-a9IJ4nD6Xkqt1VZ2eVpFvfMMP2LmxufAGs7YO2oBDB4=' 'sha256-N0HRMEWYkO/arc+Xl05f8gfc0uI6UbxTHAJcDIM6+Wo=' 'sha256-jtCL9kbTfOHqeQR9Sa1pkHSrZQ2d+eloZslAeKJAI34=' 'sha256-g6o/4Jo5s2FghEW2cjJAx+aLK87vCR6G/RdOk+q06G4='; img-src data:; connect-src ws://127.0.0.1:*">
 
 		<meta http-equiv="onion-location" content="http://totpmgx6wksbquraailhqzyaue6e6k47zcvvxkknsdm5puwavc4kegqd.onion">
 
@@ -96,7 +96,7 @@
             </article>
             
             <div class="main card">
-                <my-input class="section"></my-input>
+                <my-input></my-input>
 
                 <div class="separator"></div>
 
@@ -188,6 +188,8 @@
                     }
 
                     connectedCallback() {
+                        this.addEventListener('generate', this.clickHandler)
+
                         const template = document
                             .querySelector('#my-app')
                             .content.cloneNode(true)
@@ -247,7 +249,23 @@
             }
 
             my-accordion .my-accordion-header {
+                display: flex;
+                align-items: center;
+                
                 cursor: pointer;
+                font-weight: bold;
+                font-size: 1.1rem;
+            }
+
+            my-accordion .my-accordion-header::after {
+                content: ' ➤';
+                font-size: 0.5rem;
+                margin-left: 0.25rem;
+            }
+
+            my-accordion .my-accordion-header[open]::after {
+                content: ' ▼';
+                font-size: 0.75rem;
             }
 
             my-accordion .my-accordion-body {
@@ -256,6 +274,7 @@
 
             my-accordion .my-accordion-body[show] {
                 display: block;
+                margin-top: 0.5rem;
             }
         </style>
         <script>
@@ -280,11 +299,14 @@
                     }
 
                     toggleAccordion() {
+                        const header = this.querySelector('.my-accordion-header')
                         const body = this.querySelector('.my-accordion-body')
 
                         if (body.hasAttribute('show')) {
+                            header.removeAttribute('open')
                             body.removeAttribute('show')
                         } else {
+                            header.setAttribute('open', 'open')
                             body.setAttribute('show', 'show')
                         }
                     }
@@ -372,16 +394,19 @@
                 border: 1px solid silver;
                 border-radius: 0.25rem;
                 margin: 0.25rem 0;
+                background: #fff;
+            }
+
+            my-input my-secret-input {
+                display: block;
+                padding: 0.5rem 1rem;
+                border-bottom: 1px solid lightgray;
             }
 
             my-input my-accordion {
-                margin-top: 1rem;
-            }
-
-            my-input my-accordion .my-accordion-header {
-                font-weight: bold;
-                text-decoration: underline;
-                font-size: 1.1rem;
+                display: block;
+                padding: 0.5rem 1rem;
+                padding-bottom: 0.25rem;
             }
 
             my-input my-advanced-input label {
