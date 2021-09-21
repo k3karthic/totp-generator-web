@@ -4,6 +4,7 @@
   "description": "Generate TOTP codes from your browser",
   "main": "''",
   "devDependencies": {
+    "ansi-regex": "^6.0.1",
     "eslint": "^7.32.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-config-standard": "^16.0.3",
@@ -12,8 +13,8 @@
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-prettier": "^4.0.0",
     "eslint-plugin-promise": "^5.1.0",
-    "jsdom": "^17.0.0",
     "http-server": "^13.0.2",
+    "jsdom": "^17.0.0",
     "lodash": "^4.17.21",
     "prettier": "^2.4.1",
     "prettier-config-standard": "^4.0.0"
