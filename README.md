@@ -1,8 +1,8 @@
 # TOTP Web Generator
 
-Generate [TOTP](https://en.wikipedia.org/wiki/Time-based_One-Time_Password) codes directly in your browser for Two-Factor Authentication (2FA). Compatible with authenticator applications like [Google Authenticator](https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2&hl=en_IN&gl=US), [Authy](https://authy.com/) and [Microsoft Authenticator](https://www.microsoft.com/en-in/account/authenticator).
+Generate [TOTP](https://en.wikipedia.org/wiki/Time-based_One-Time_Password) codes directly from your browser for Two-Factor Authentication (2FA). Compatible with authenticator applications like [Google Authenticator](https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2&hl=en_IN&gl=US), [Authy](https://authy.com/) and [Microsoft Authenticator](https://www.microsoft.com/en-in/account/authenticator).
 
-Demo: [https://totp.maverickgeek.xyz/](https://totp.maverickgeek.xyz/)
+Demo: [totp.cf.maverickgeek.xyz](https://totp.cf.maverickgeek.xyz/)
 
 ![Application Screenshot](resources/screenshot.png)
 
@@ -33,7 +33,7 @@ The application supports secret keys in the following formats,
 1. [Web Crypto](https://developer.mozilla.org/en-US/docs/Web/API/Web_Crypto_API) - Used to calculate the HMAC. [Browser Support](https://caniuse.com/cryptography)
 2. [Uint8Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint8Array) - Used to store and process binary data according to [RFC 6238 (TOTP)](https://tools.ietf.org/html/rfc6238) and [RFC 4226 (HOTP)](https://tools.ietf.org/html/rfc4226). [Browser Support](https://caniuse.com/mdn-javascript_builtins_uint8array)
 3. [Async/Await](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/async_function) - Easier to work with Promises. [Browser Support](https://caniuse.com/async-functions)
-4. [Custom Elements](https://developer.mozilla.org/en-US/docs/Web/Web_Components/Using_custom_elements) - Browser API used to structure the UI as components while avoiding JavaScript framework churn. [Browser Support](https://caniuse.com/custom-elementsv1)
+4. [Custom Elements](https://developer.mozilla.org/en-US/docs/Web/Web_Components/Using_custom_elements) - Browser API used to structure the UI as components and avoiding JavaScript framework churn. [Browser Support](https://caniuse.com/custom-elementsv1)
 
 ## Development
 
@@ -56,13 +56,23 @@ Use the following command to start live-server.
 npm run start
 ```
 
+### Development Environment
+
+Get started working on this repository from your browser using [Gitpod](https://gitpod.io). Click on the button below to create a GitPod environment, <br />
+[![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/k3karthic/totp-generator-web)
+
+### Code Mirrors
+
+* GitHub: [github.com/k3karthic/totp-generator-web](https://github.com/k3karthic/totp-generator-web/)
+* Codeberg: [codeberg.org/k3karthic/totp-generator-web](https://codeberg.org/k3karthic/totp-generator-web)
+
 ## Deployment
 
-The site is deployed on [Netlify](https://www.netlify.com/) with a GitHub build hook to automatically push a new version when a commit is made to the `main` branch. The contents of the `dist` folder is used for the deployment.
+The site is deployed on [Netlify](https://www.netlify.com/) and served via [CloudFlare](https://cloudflare.com). A GitHub build hook is used to automatically push a new version when a commit is made to the `main` branch. The contents of the `dist` folder is used for the deployment.
 
 Development is done on the `devel` branch and merged with `main` for a release.
 
-Use the following command to update the `dist` folder which is served by Netlify. The command removes CSP configurations which are only required for development.
+Use the following command to update the `dist` folder. The command removes CSP configurations which are only required for development.
 ```
 npm run build
 ```
