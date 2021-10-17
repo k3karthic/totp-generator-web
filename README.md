@@ -66,7 +66,7 @@ Get started working on this repository from your browser using [Gitpod](https://
 
 ## Deployment
 
-Development happens on the devel branch and merged with main for a release.  A GitHub build hook pushes a new version for every update of the main branch using the contents of the dist folder. [Netlify](https://www.netlify.com/) hosts the site and [CloudFlare](https://cloudflare.com) is the [Content Distribution Network (CDN)](https://en.wikipedia.org/wiki/Content_delivery_network).
+Development happens on the devel branch and merged with main for a release.  A GitHub build hook pushes a new version for every update of the main branch using the contents of the dist folder. [Netlify](https://www.netlify.com/) hosts the site and [CloudFlare](https://cloudflare.com) is the [Content Delivery Network (CDN)](https://en.wikipedia.org/wiki/Content_delivery_network).
 
 Use the following command to update the `dist` folder. The command removes CSP configurations which are only required for development.
 ```
