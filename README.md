@@ -57,7 +57,8 @@ npm run start
 ### Environment
 
 Get started working on this repository from your browser using [Gitpod](https://gitpod.io). Click on the button below to create a GitPod environment, <br />
-[![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/k3karthic/totp-generator-web)
+* GitHub: [![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/k3karthic/totp-generator-web)
+* Codeberg: [![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://codeberg.org/k3karthic/totp-generator-web)
 
 ### Code Mirrors
 
