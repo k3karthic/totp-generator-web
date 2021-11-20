@@ -14,6 +14,6 @@ tasks:
       chmod 600 ~/.ssh/config &&
       echo $CODEBERG_SSH_KEY | base64 -d > ~/.ssh/codeberg && 
       chmod 400 ~/.ssh/codeberg &&
-      [[ $(grep -c codeberg /workspace/totp-generator-web/.git/config) -ge "1" ]] &&
+      [[ $(grep -c codeberg /workspace/totp-generator-web/.git/config) -eq "0" ]] &&
       cd /workspace/totp-generator-web &&
       git remote add codeberg git@codeberg.org:k3karthic/totp-generator-web.git
