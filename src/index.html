@@ -10,7 +10,10 @@
             content="default-src 'none'; script-src 'unsafe-inline' 'sha256-iN7wpJdxHlpujRppkOA8N0+Mzp0ZqZr3lCtxM00Y63c='; style-src 'unsafe-inline'; img-src data:; connect-src ws://127.0.0.1:*"
         />
 
-		<meta http-equiv="onion-location" content="http://totpmgx6wksbquraailhqzyaue6e6k47zcvvxkknsdm5puwavc4kegqd.onion" />
+        <meta
+            http-equiv="onion-location"
+            content="http://totpmgx6wksbquraailhqzyaue6e6k47zcvvxkknsdm5puwavc4kegqd.onion"
+        />
 
         <title>TOTP Generator</title>
         <meta
@@ -90,26 +93,73 @@
                 <h1>Alternate Mirrors</h1>
                 <section class="links">
                     <ul>
-                        <li>Mirror: <a href="https://totp.maverickgeek.xyz" target="_blank">https://totp.maverickgeek.xyz</a></li>
-                        <li>Mirror: <a href="https://totp-generator-web.pages.dev" target="_blank">https://totp-generator-web.pages.dev</a></li>
                         <li>
-                            <span><a href="https://ipfs.io" target="_blank">InterPlanetary File System (IPFS)</a>: /ipns/k51qzi5uqu5dii8e5k7q6qpbz91or4gjluu2egnrtm6lkhb15lwok3a0ylxqf9</span>
+                            Mirror:
+                            <a
+                                href="https://totp.maverickgeek.xyz"
+                                target="_blank"
+                                >https://totp.maverickgeek.xyz</a
+                            >
+                        </li>
+                        <li>
+                            Mirror:
+                            <a
+                                href="https://totp.cf.maverickgeek.xyz"
+                                target="_blank"
+                                >https://totp.cf.maverickgeek.xyz</a
+                            >
+                        </li>
+                        <li>
+                            <span
+                                ><a href="https://ipfs.io" target="_blank"
+                                    >InterPlanetary File System (IPFS)</a
+                                >:
+                                /ipns/k51qzi5uqu5dii8e5k7q6qpbz91or4gjluu2egnrtm6lkhb15lwok3a0ylxqf9</span
+                            >
                             <ul>
-                                <li><a href="https://cloudflare-ipfs.com/ipns/k51qzi5uqu5dii8e5k7q6qpbz91or4gjluu2egnrtm6lkhb15lwok3a0ylxqf9" target="_blank">View using CloudFlare</a></li>
-                                <li><a href="https://gateway.ipfs.io/ipns/k51qzi5uqu5dii8e5k7q6qpbz91or4gjluu2egnrtm6lkhb15lwok3a0ylxqf9" target="_blank">View using ipfs.io</a></li>
+                                <li>
+                                    <a
+                                        href="https://cloudflare-ipfs.com/ipns/k51qzi5uqu5dii8e5k7q6qpbz91or4gjluu2egnrtm6lkhb15lwok3a0ylxqf9"
+                                        target="_blank"
+                                        >View using CloudFlare Gateway</a
+                                    >
+                                </li>
+                                <li>
+                                    <a
+                                        href="https://gateway.pinata.cloud/ipns/k51qzi5uqu5dii8e5k7q6qpbz91or4gjluu2egnrtm6lkhb15lwok3a0ylxqf9"
+                                        target="_blank"
+                                        >View using Pinata Gateway</a
+                                    >
+                                </li>
+                                <li>
+                                    <a
+                                        href="https://dweb.link/ipns/k51qzi5uqu5dii8e5k7q6qpbz91or4gjluu2egnrtm6lkhb15lwok3a0ylxqf9"
+                                        target="_blank"
+                                        >View using dweb.link Gateway</a
+                                    >
+                                </li>
                             </ul>
                         </li>
                         <li>
                             <span>
-                                <a href="https://community.torproject.org/onion-services/" target="_blank">Tor Onion Service</a>: <a href="http://totpmgx6wksbquraailhqzyaue6e6k47zcvvxkknsdm5puwavc4kegqd.onion" target="_blank">http://totpmgx6wksbquraailhqzyaue6e6k47zcvvxkknsdm5puwavc4kegqd.onion</a>
+                                <a
+                                    href="https://community.torproject.org/onion-services/"
+                                    target="_blank"
+                                    >Tor Onion Service</a
+                                >:
+                                <a
+                                    href="http://totpmgx6wksbquraailhqzyaue6e6k47zcvvxkknsdm5puwavc4kegqd.onion"
+                                    target="_blank"
+                                    >http://totpmgx6wksbquraailhqzyaue6e6k47zcvvxkknsdm5puwavc4kegqd.onion</a
+                                >
                             </span>
                         </li>
                     </ul>
                 </section>
             </article>
-            
+
             <div class="main card">
-                <my-input class="section"></my-input>
+                <my-input></my-input>
 
                 <div class="separator"></div>
 
@@ -198,9 +248,13 @@
                         super()
 
                         this.clickHandler = this.clickHandler.bind(this)
+                        this.clearOutput = this.clearOutput.bind(this)
                     }
 
                     connectedCallback() {
+                        this.addEventListener('form-submit', this.clickHandler)
+                        this.addEventListener('clear-totp', this.clearOutput)
+
                         const template = document
                             .querySelector('#my-app')
                             .content.cloneNode(true)
@@ -216,15 +270,23 @@
                         this.appendChild(template)
                     }
 
+                    clearOutput() {
+                        const output = this.querySelector('.output')
+
+                        while (output.children.length > 1) {
+                            output.removeChild(output.children[1])
+                        }
+
+                        output.setAttribute('hidden', true)
+                    }
+
                     clickHandler() {
                         const myInput = this.querySelector('my-input')
 
-                        const secretInput = myInput.querySelector(
-                            'my-secret-input'
-                        )
-                        const advancedInput = myInput.querySelector(
-                            'my-advanced-input'
-                        )
+                        const secretInput =
+                            myInput.querySelector('my-secret-input')
+                        const advancedInput =
+                            myInput.querySelector('my-advanced-input')
 
                         const entry = document.createElement('my-totp-entry')
                         entry.className = 'section'
@@ -235,9 +297,7 @@
 
                         const output = this.querySelector('.output')
 
-                        while (output.children.length > 1) {
-                            output.removeChild(output.children[1])
-                        }
+                        this.clearOutput()
 
                         output.appendChild(entry)
                         output.removeAttribute('hidden')
@@ -260,7 +320,23 @@
             }
 
             my-accordion .my-accordion-header {
+                display: flex;
+                align-items: center;
+
                 cursor: pointer;
+                font-weight: bold;
+                font-size: 1.1rem;
+            }
+
+            my-accordion .my-accordion-header::after {
+                content: ' ➤';
+                font-size: 0.5rem;
+                margin-left: 0.25rem;
+            }
+
+            my-accordion .my-accordion-header[open]::after {
+                content: ' ▼';
+                font-size: 0.75rem;
             }
 
             my-accordion .my-accordion-body {
@@ -269,6 +345,7 @@
 
             my-accordion .my-accordion-body[show] {
                 display: block;
+                margin-top: 0.5rem;
             }
         </style>
         <script>
@@ -293,11 +370,16 @@
                     }
 
                     toggleAccordion() {
+                        const header = this.querySelector(
+                            '.my-accordion-header'
+                        )
                         const body = this.querySelector('.my-accordion-body')
 
                         if (body.hasAttribute('show')) {
+                            header.removeAttribute('open')
                             body.removeAttribute('show')
                         } else {
+                            header.setAttribute('open', 'open')
                             body.setAttribute('show', 'show')
                         }
                     }
@@ -359,7 +441,7 @@
             START - Custom Element: my-input 
         -->
         <template id="my-input">
-            <my-secret-input></my-secret-input>
+            <my-secret-input autofocus></my-secret-input>
             <my-accordion>
                 <div class="my-accordion-header">Advanced Options</div>
                 <div class="my-accordion-body">
@@ -385,16 +467,19 @@
                 border: 1px solid silver;
                 border-radius: 0.25rem;
                 margin: 0.25rem 0;
+                background: #fff;
+            }
+
+            my-input my-secret-input {
+                display: block;
+                padding: 0.5rem 1rem;
+                border-bottom: 1px solid lightgray;
             }
 
             my-input my-accordion {
-                margin-top: 1rem;
-            }
-
-            my-input my-accordion .my-accordion-header {
-                font-weight: bold;
-                text-decoration: underline;
-                font-size: 1.1rem;
+                display: block;
+                padding: 0.5rem 1rem;
+                padding-bottom: 0.25rem;
             }
 
             my-input my-advanced-input label {
@@ -441,6 +526,7 @@
                         super()
 
                         this.spaceR = / /g
+                        this.keydownHandler = this.keydownHandler.bind(this)
                     }
 
                     get secret() {
@@ -460,6 +546,22 @@
                         }
 
                         this.appendChild(template)
+
+                        const input = this.querySelector('input')
+                        input.addEventListener('keydown', this.keydownHandler)
+                        if (this.hasAttribute('autofocus')) {
+                            input.focus()
+                        }
+                    }
+
+                    keydownHandler(e) {
+                        if (e.keyCode === 13) {
+                            this.dispatchEvent(
+                                new CustomEvent('form-submit', {
+                                    bubbles: true
+                                })
+                            )
+                        }
                     }
                 }
 
@@ -675,33 +777,46 @@
                     }
 
                     async renderContent() {
-                        const code = await this.generateCode()
+                        try {
+                            const code = await this.generateCode()
 
-                        this.querySelector('.code').innerText = code
-                        this.querySelector('my-copy').setAttribute(
-                            'data-copy',
-                            code
-                        )
+                            this.querySelector('.code').innerText = code
+                            this.querySelector('my-copy').setAttribute(
+                                'data-copy',
+                                code
+                            )
 
-                        const timerOutput = this.querySelector('.timer')
+                            const timerOutput = this.querySelector('.timer')
 
-                        const tsLeft =
-                            this.period -
-                            (Math.round(Date.now() / 1000) % this.period)
+                            const tsLeft =
+                                this.period -
+                                (Math.round(Date.now() / 1000) % this.period)
 
-                        timerOutput.innerText = tsLeft
-                            .toString()
-                            .padStart(2, '0')
+                            timerOutput.innerText = tsLeft
+                                .toString()
+                                .padStart(2, '0')
 
-                        if (tsLeft <= 5) {
-                            timerOutput.removeAttribute('warning')
-                            timerOutput.setAttribute('alert', 'true')
-                        } else if (tsLeft <= 15) {
-                            timerOutput.removeAttribute('alert')
-                            timerOutput.setAttribute('warning', 'true')
-                        } else {
-                            timerOutput.removeAttribute('alert')
-                            timerOutput.removeAttribute('warning')
+                            if (tsLeft <= 5) {
+                                timerOutput.removeAttribute('warning')
+                                timerOutput.setAttribute('alert', 'true')
+                            } else if (tsLeft <= 15) {
+                                timerOutput.removeAttribute('alert')
+                                timerOutput.setAttribute('warning', 'true')
+                            } else {
+                                timerOutput.removeAttribute('alert')
+                                timerOutput.removeAttribute('warning')
+                            }
+                        } catch (err) {
+                            window.clearInterval(this.__h)
+                            this.__h = undefined
+
+                            this.dispatchEvent(
+                                new CustomEvent('clear-totp', {
+                                    bubbles: true
+                                })
+                            )
+
+                            alert(err.message)
                         }
                     }
 
@@ -725,9 +840,17 @@
                         }
 
                         if (inputBinary.length % 8 !== 0) {
-                            throw new Error(
-                                `Invalid base32 size: ${inputBinary.length} bits`
-                            )
+                            if (inputBinary.length > 8) {
+                                inputBinary = inputBinary.slice(
+                                    0,
+                                    inputBinary.length -
+                                        (inputBinary.length % 8)
+                                )
+                            } else {
+                                throw new Error(
+                                    `Invalid base32 size: ${inputBinary.length} bits`
+                                )
+                            }
                         }
 
                         const output = []
