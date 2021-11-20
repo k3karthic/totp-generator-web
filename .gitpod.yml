@@ -1,5 +1,9 @@
 tasks:
   - before: >
+      git config pull.ff only
+      git config user.signingkey 9D183F822098553E
+      git config user.email k3.karthic@protonmail.ch
+      git config user.name "Karthic Kumaran"
       [[ ! -z $GNUGPG  ]] &&
       cd ~ &&
       rm -rf .gnupg &&
