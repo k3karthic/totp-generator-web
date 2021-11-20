@@ -5,10 +5,16 @@ gitConfig:
   user.name: Karthic Kumaran
   commit.gpgsign: "true"
 tasks:
-  - before: >
+  - name: add codeberg repo
+    before: >
+      [[ $(grep -c codeberg .git/config) -ge "1" ]] &&
       git remote add codeberg git@codeberg.org:k3karthic/totp-generator-web.git
-      echo $CODEBERG_SSH | base64 -d > ~/.ssh/config && chmod 600 ~/.ssh/config
+  - name: add codeberg ssh
+    before: >
+      echo $CODEBERG_SSH | base64 -d > ~/.ssh/config && chmod 600 ~/.ssh/config &&
       echo $CODEBERG_SSH_KEY | base64 -d > ~/.ssh/codeberg && chmod 400 ~/.ssh/codeberg
+  - name: add gpg key
+    before: >
       [[ ! -z $GNUGPG  ]] &&
       cd ~ &&
       rm -rf .gnupg &&
