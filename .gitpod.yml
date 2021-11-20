@@ -1,9 +1,14 @@
+gitConfig:
+  pul.ff: only
+  user.signingkey: 9D183F822098553E
+  user.email: k3.karthic@protonmail.ch
+  user.name: Karthic Kumaran
+  commit.gpgsign: "true"
 tasks:
   - before: >
-      git config pull.ff only
-      git config user.signingkey 9D183F822098553E
-      git config user.email k3.karthic@protonmail.ch
-      git config user.name "Karthic Kumaran"
+      git remote add codeberg git@codeberg.org:k3karthic/totp-generator-web.git
+      echo $CODEBERG_SSH | base64 -d > ~/.ssh/config && chmod 600 ~/.ssh/config
+      echo $CODEBERG_SSH_KEY | base64 -d > ~/.ssh/codeberg && chmod 400 ~/.ssh/codeberg
       [[ ! -z $GNUGPG  ]] &&
       cd ~ &&
       rm -rf .gnupg &&
