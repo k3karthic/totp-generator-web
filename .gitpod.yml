@@ -5,15 +5,14 @@ gitConfig:
   user.name: Karthic Kumaran
   commit.gpgsign: "true"
 tasks:
-  - command: >
-      cd ~ &&
-      rm -rf .gnupg &&
+  - before: >
+      rm -rf /home/gitpod/.gnupg &&
+      cd /home/gitpod &&
       echo $GNUGPG | base64 -d | tar --no-same-owner -xzvf - &&
       cd /workspace/totp-generator-web &&
-      echo $CODEBERG_SSH | base64 -d > ~/.ssh/config && 
-      chmod 600 ~/.ssh/config &&
-      echo $CODEBERG_SSH_KEY | base64 -d > ~/.ssh/codeberg && 
-      chmod 400 ~/.ssh/codeberg &&
+      echo $CODEBERG_SSH | base64 -d > /home/gitpod/.ssh/config && 
+      chmod 600 /home/gitpod/.ssh/config &&
+      echo $CODEBERG_SSH_KEY | base64 -d > /home/gitpod/.ssh/codeberg && 
+      chmod 400 /home/gitpod/.ssh/codeberg &&
       [[ $(grep -c codeberg /workspace/totp-generator-web/.git/config) -eq "0" ]] &&
-      cd /workspace/totp-generator-web &&
       git remote add codeberg git@codeberg.org:k3karthic/totp-generator-web.git
