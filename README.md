@@ -46,12 +46,12 @@ The application supports secret keys in the following formats,
 
 Use the following command to start the build tool which watches for changes to `src/index.html`.
 ```
-npm run watch
+$ npm run watch
 ```
 
 Use the following command to start live-server.
 ```
-npm run start
+$ npm run start
 ```
 
 ### Environment
@@ -71,7 +71,7 @@ Development happens on the devel branch and merged with main for a release.  A G
 
 Use the following command to update the `dist` folder. The command removes CSP configurations which are only required for development.
 ```
-npm run build
+$ npm run build
 ```
 
 ## Acknowledgements
