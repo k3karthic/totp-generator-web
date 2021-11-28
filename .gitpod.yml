@@ -1,5 +1,5 @@
 gitConfig:
-  pul.ff: only
+  pull.ff: only
   user.signingkey: 9D183F822098553E
   user.email: k3.karthic@protonmail.ch
   user.name: Karthic Kumaran
