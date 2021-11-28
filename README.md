@@ -2,7 +2,9 @@
 
 Generate [TOTP](https://en.wikipedia.org/wiki/Time-based_One-Time_Password) codes right from your browser for Two-Factor Authentication (2FA). Compatible with authenticator applications like [Google Authenticator](https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2&hl=en_IN&gl=US), [Authy](https://authy.com/) and [Microsoft Authenticator](https://www.microsoft.com/en-in/account/authenticator).
 
-Demo: [totp.cf.maverickgeek.xyz](https://totp.cf.maverickgeek.xyz/)
+Demo,
+* [Netlify](https://www.netlify.com/): [totp.maverickgeek.xyz](https://totp.maverickgeek.xyz/)
+* [CloudFlare](https://cloudflare.com): [totp-generator-web.pages.dev](https://totp-generator-web.pages.dev/)
 
 ![Application Screenshot](resources/screenshot.png)
 
@@ -67,7 +69,7 @@ Get started working on this repository from your browser using [Gitpod](https://
 
 ## Deployment
 
-Development happens on the devel branch and merged with main for a release.  A GitHub build hook pushes a new version for every update of the main branch using the contents of the dist folder. [Netlify](https://www.netlify.com/) hosts the site and [CloudFlare](https://cloudflare.com) is the [Content Delivery Network (CDN)](https://en.wikipedia.org/wiki/Content_delivery_network).
+Development happens on the devel branch and merged with main for a release.  A GitHub build hook pushes a new version for every update of the main branch using the contents of the dist folder. Netlify and CloudFlare host the site.
 
 Use the following command to update the `dist` folder. The command removes CSP configurations which are only required for development.
 ```
