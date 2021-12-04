@@ -46,12 +46,12 @@ The application supports secret keys in the following formats,
 
 [Content Security Policy](https://content-security-policy.com/hash/) uses asset hashes updated by a minimal build tool (watch.js). A [meta tag](https://content-security-policy.com/examples/meta/) is the preferred method of policy configuration as [Netlify](https://www.netlify.com/) hosts the site.
 
-Use the following command to start the build tool which watches for changes to `src/index.html`.
+Use the following command to start the build tool which watches for changes to `src/index.html`,
 ```
 $ npm run watch
 ```
 
-Use the following command to start live-server.
+Use the following command to start live-server,
 ```
 $ npm run start
 ```
