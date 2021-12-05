@@ -44,7 +44,7 @@ The application supports secret keys in the following formats,
 -   [Live Server](https://github.com/tapio/live-server) — Auto-reload on changes to `site/index.html`
 -   [Visual Studio Code](https://code.visualstudio.com/) — Code editor with [ESLint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint) and [Prettier](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode) extensions.
 
-[Content Security Policy](https://content-security-policy.com/hash/) uses asset hashes updated by a minimal build tool (watch.js). A [meta tag](https://content-security-policy.com/examples/meta/) is the preferred method of policy configuration as [Netlify](https://www.netlify.com/) hosts the site.
+[Content Security Policy](https://content-security-policy.com/hash/) whitelists assets that can be run. Assets are identified by their SHA-256 hash which are updated by a minimal build tool (watch.js). A [meta tag](https://content-security-policy.com/examples/meta/) is the preferred method of policy configuration as [Netlify](https://www.netlify.com/) hosts the site.
 
 Use the following command to start the build tool which watches for changes to `src/index.html`,
 ```
