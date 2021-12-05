@@ -42,7 +42,7 @@ The application supports secret keys in the following formats,
 -   [ESLint](https://eslint.org/) — JavaScript linter
 -   [Prettier](https://prettier.io/) — Code formatting
 -   [Live Server](https://github.com/tapio/live-server) — Auto-reload on changes to `site/index.html`
--   [Visual Studio Code](https://code.visualstudio.com/) — Code editor with [ESLint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint) and [Prettier](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode) extensions.
+-   [Visual Studio Code](https://code.visualstudio.com/) — Code editor with [ESLint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint) and [Prettier](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode) extensions
 
 [Content Security Policy](https://content-security-policy.com/hash/) whitelists assets (e.g, JavaScript, CSS) by their SHA-256 hash. A minimal build tool (watch.js) updates the CSP hashes. A [meta tag](https://content-security-policy.com/examples/meta/) is the preferred method of policy configuration as Netlify and CloudFlare host the site.
 
