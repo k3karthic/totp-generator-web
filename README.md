@@ -2,7 +2,7 @@
 
 Generate [TOTP](https://en.wikipedia.org/wiki/Time-based_One-Time_Password) codes right from your browser for Two-Factor Authentication (2FA). Compatible with authenticator applications like [Google Authenticator](https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2&hl=en_IN&gl=US), [Authy](https://authy.com/) and [Microsoft Authenticator](https://www.microsoft.com/en-in/account/authenticator).
 
-Demo,
+**Demo**,
 * [Netlify](https://www.netlify.com/): [totp.maverickgeek.xyz](https://totp.maverickgeek.xyz/)
 * [CloudFlare](https://cloudflare.com): [totp-generator-web.pages.dev](https://totp-generator-web.pages.dev/)
 
@@ -44,7 +44,7 @@ The application supports secret keys in the following formats,
 -   [Live Server](https://github.com/tapio/live-server) — Auto-reload on changes to `site/index.html`
 -   [Visual Studio Code](https://code.visualstudio.com/) — Code editor with [ESLint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint) and [Prettier](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode) extensions.
 
-[Content Security Policy](https://content-security-policy.com/hash/) whitelists assets (e.g, JavaScript, CSS) by their SHA-256 hash. A minimal build tool (watch.js) updates the CSP hashes. A [meta tag](https://content-security-policy.com/examples/meta/) is the preferred method of policy configuration as [Netlify](https://www.netlify.com/) hosts the site.
+[Content Security Policy](https://content-security-policy.com/hash/) whitelists assets (e.g, JavaScript, CSS) by their SHA-256 hash. A minimal build tool (watch.js) updates the CSP hashes. A [meta tag](https://content-security-policy.com/examples/meta/) is the preferred method of policy configuration as Netlify and CloudFlare host the site.
 
 Use the following command to start the build tool which watches for changes to `src/index.html`,
 ```
