@@ -69,7 +69,7 @@ Get started working on this repository from your browser using [Gitpod](https://
 
 ## Deployment
 
-Development happens on the devel branch and merged with main for a release.  A GitHub build hook pushes a new version for every update of the main branch using the contents of the dist folder. Netlify and CloudFlare host the site.
+Development happens on the devel branch and merged with main for a release.  A GitHub build hook pushes a new version for every update of the main branch using the contents of the dist folder.
 
 Use the following command to update the `dist` folder. The command removes CSP configurations which are only required for development.
 ```
