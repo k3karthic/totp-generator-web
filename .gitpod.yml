@@ -9,6 +9,7 @@ tasks:
       rm -rf /home/gitpod/.gnupg &&
       cd /home/gitpod &&
       echo $GNUGPG | base64 -d | tar --no-same-owner -xzvf - &&
+      echo 'pinentry-mode loopback' >> ~/.gnupg/gpg.conf &&
       cd /workspace/totp-generator-web &&
       echo $SSH_CONFIG | base64 -d > /home/gitpod/.ssh/config && 
       chmod 600 /home/gitpod/.ssh/config &&
