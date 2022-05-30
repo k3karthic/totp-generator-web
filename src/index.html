@@ -548,7 +548,13 @@
                         this.appendChild(template)
 
                         const input = this.querySelector('input')
+
+						// Workaround for weird changes by Pinata
+						input.setAttribute('type', 'password');
+						input.removeAttribute('disabled');
+
                         input.addEventListener('keydown', this.keydownHandler)
+
                         if (this.hasAttribute('autofocus')) {
                             input.focus()
                         }
