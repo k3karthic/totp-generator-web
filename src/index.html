@@ -118,9 +118,9 @@
                                 </li>
                                 <li>
                                     <a
-                                        href="https://gateway.pinata.cloud/ipns/k51qzi5uqu5dii8e5k7q6qpbz91or4gjluu2egnrtm6lkhb15lwok3a0ylxqf9"
+                                        href="https://ipfs.io/ipns/k51qzi5uqu5dii8e5k7q6qpbz91or4gjluu2egnrtm6lkhb15lwok3a0ylxqf9"
                                         target="_blank"
-                                        >View using Pinata Gateway</a
+                                        >View using IPFS.io Gateway</a
                                     >
                                 </li>
                                 <li>
@@ -540,10 +540,6 @@
                         this.appendChild(template)
 
                         const input = this.querySelector('input')
-
-						// Workaround for weird changes by Pinata
-						input.setAttribute('type', atob('cGFzc3dvcmQ='));
-						input.removeAttribute('disabled');
 
                         input.addEventListener('keydown', this.keydownHandler)
 
