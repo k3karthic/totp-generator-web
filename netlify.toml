@@ -2,4 +2,4 @@
   for = "/*"
   [headers.values]
     x-ipfs-path = "/ipns/k51qzi5uqu5dii8e5k7q6qpbz91or4gjluu2egnrtm6lkhb15lwok3a0ylxqf9"
-    onion-location = "http://totpmgx6wksbquraailhqzyaue6e6k47zcvvxkknsdm5puwavc4kegqd.onion/"
+    onion-location = "http://totpmgx6wksbquraailhqzyaue6e6k47zcvvxkknsdm5puwavc4kegqd.onion"
