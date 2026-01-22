@@ -15,7 +15,7 @@
     "eslint-plugin-promise": "^6.0.0",
     "http-server": "^14.1.1",
     "jsdom": "^20.0.0",
-    "lodash": "^4.17.21",
+    "lodash": "^4.17.23",
     "npm-check-updates": "~19.3.1",
     "prettier": "^2.7.1",
     "prettier-config-standard": "^5.0.0"
